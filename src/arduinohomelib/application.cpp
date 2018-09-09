@@ -1,15 +1,18 @@
 #include "arduinohomelib/application.h"
 
+EthernetClient ethClient;
+PubSubClient pubSubClient(ethClient);
+
 void Application::setup()
 {
     Serial.begin(9600);
 
     Serial.print("Start ");
     Serial.println(Settings::name);
+}
 
-    this->initEthernet();
-
-    this->ethernet->setup();
+void Application::loop()
+{
 
 }
 
@@ -24,6 +27,15 @@ EthernetComponent *Application::initEthernet()
     this->ethernet = ethernet;
 
     return this->ethernet;
+}
+
+MqttClient *Application::initMqtt(String serverId, String username, String password)
+{
+    struct MQTTCredentials credentials { serverId, 1883, username, password, Settings::name };
+    auto *mqtt = new MqttClient(pubSubClient, credentials);
+    this->mqtt = mqtt;
+
+    return this->mqtt;
 }
 
 Application App;
