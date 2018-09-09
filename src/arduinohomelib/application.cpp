@@ -38,4 +38,12 @@ MqttClient *Application::initMqtt(String serverId, String username, String passw
     return this->mqtt;
 }
 
+UdpComponent *Application::initUdp(IPAddress receiverIp)
+{
+    auto *udp = new UdpComponent(receiverIp);
+    this->udp = udp;
+
+    return this->udp;
+}
+
 Application App;

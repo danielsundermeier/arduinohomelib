@@ -1,7 +1,6 @@
 #ifndef ARDUINOHOMELIB_MQTT_CLIENT_H
 #define ARDUINOHOMELIB_MQTT_CLIENT_H
 
-#include <Arduino.h>
 #include <ArduinoJson.h>
 #include <Ethernet.h>
 #include <PubSubClient.h>
