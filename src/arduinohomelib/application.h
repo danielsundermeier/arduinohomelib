@@ -2,10 +2,15 @@
 #define ARDUINOHOMELIB_APPLICATION_H
 
 #include <Arduino.h>
+#include <StandardCplusplus.h>
+#include <system_configuration.h>
+#include <unwind-cxx.h>
+#include <utility.h>
 #include "arduinohomelib/settings.h"
 #include "arduinohomelib/network/ethernet_component.h"
 #include "arduinohomelib/network/udp_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"
+#include "arduinohomelib/button/momentary_button_component.h"
 
 class Application
 {
