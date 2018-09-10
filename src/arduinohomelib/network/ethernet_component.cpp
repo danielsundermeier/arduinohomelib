@@ -5,10 +5,10 @@ EthernetComponent::EthernetComponent()
     EthernetClient client;
 }
 
-void EthernetComponent::setup()
+void EthernetComponent::setup(byte* mac)
 {
     Serial.println("Ethernet Setup");
-    Ethernet.begin(generateMac());
+    Ethernet.begin(mac);
     delay(1500);
     Serial.println(Ethernet.localIP());
 }
@@ -21,9 +21,4 @@ void EthernetComponent::loop()
 EthernetClient EthernetComponent::getClient() const
 {
     return client;
-}
-
-byte* EthernetComponent::generateMac()
-{
-    return mac;
 }

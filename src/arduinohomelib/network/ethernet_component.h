@@ -7,13 +7,11 @@ class EthernetComponent
 {
     public:
         EthernetComponent();
-        void setup();
+        void setup(byte* mac);
         void loop();
         EthernetClient getClient() const;
     private:
-        byte mac[24] { 0xFE, 0xED, 0xBA, 0xFE, 0xFE, 0xED };
         EthernetClient client;
-        byte* generateMac();
 };
 
 #endif
