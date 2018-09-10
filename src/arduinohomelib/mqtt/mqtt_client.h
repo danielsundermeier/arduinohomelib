@@ -34,4 +34,6 @@ class MqttClient
         void unavailable();
 };
 
+extern MqttClient *globalMqttClient;
+
 #endif

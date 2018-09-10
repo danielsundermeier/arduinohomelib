@@ -4,6 +4,7 @@ MqttClient::MqttClient(PubSubClient client, const MQTTCredentials &credentials) 
 {
     _statusTopic = _credentials.clientId + "/status";
     this->client = client;
+    globalMqttClient = this;
 }
 
 void MqttClient::setup(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)())
@@ -91,3 +92,5 @@ void MqttClient::unavailable()
 {
     publish(_statusTopic.c_str(), "offline");
 }
+
+MqttClient *globalMqttClient = nullptr;
