@@ -16,14 +16,17 @@ struct MQTTCredentials {
 class MqttClient
 {
     public:
-        MqttClient(PubSubClient client, const MQTTCredentials &credentials);
+        MqttClient(PubSubClient client, const MQTTCredentials &credentials, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)());
         void setup(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)());
         void setup(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length));
+        void setup();
         void loop();
         bool connect();
         bool publish(const char* topic, const char* payload);
         bool publish(const char* topic, JsonObject& data);
         bool subscribe(const char* topic);
+        void setConnectedCallback(void (*connectedCallback)());
+        void setMessageReceivedCallback(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length));
     private:
         bool isConnected = false;
         MQTTCredentials _credentials;

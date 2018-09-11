@@ -23,15 +23,16 @@ class MomentaryButton : public Component
     public:
         const int BOUNCER_INTERVAL = 25;
         MomentaryButton();
-        MomentaryButton(uint8_t pin);
+        MomentaryButton(int pin);
+        MomentaryButton(int pin, int relaisPin);
         void setup() override;
         void loop() override;
-        void setPin(uint8_t pin);
-        void setRelaisPin(uint8_t pin);
+        void setPin(int pin);
+        void setRelaisPin(int pin);
     private:
         String _topic;
-        uint8_t _pin;
-        uint8_t _relaisPin = 0;
+        int _pin;
+        int _relaisPin = 0;
         Bounce _bouncer;
         boolean DCwaiting = false; // whether we're waiting for a double click (down)
         boolean DConUp = false; // whether to register a double click on next release, or whether to wait and click

@@ -1,18 +1,33 @@
 #include "arduinohomelib/mqtt/mqtt_client.h"
 
-MqttClient::MqttClient(PubSubClient client, const MQTTCredentials &credentials) : _credentials(credentials)
+MqttClient::MqttClient(PubSubClient client, const MQTTCredentials &credentials, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)()) : _credentials(credentials)
 {
+
     _statusTopic = _credentials.clientId + "/status";
     this->client = client;
+    this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
+    setConnectedCallback(connectedCallback);
+    setMessageReceivedCallback(messageReceivedCallback);
+
     globalMqttClient = this;
+}
+
+void MqttClient::setMessageReceivedCallback(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length))
+{
+    this->client.setCallback(messageReceivedCallback);
+}
+
+void MqttClient::setConnectedCallback(void (*connectedCallback)())
+{
+    _connectedCallback = connectedCallback;
 }
 
 void MqttClient::setup(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)())
 {
     _connectedCallback = connectedCallback;
 
-    client.setServer(_credentials.serverIp.c_str(), _credentials.port);
-    client.setCallback(messageReceivedCallback);
+    this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
+    this->client.setCallback(messageReceivedCallback);
 }
 
 void MqttClient::setup(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length))
@@ -20,8 +35,14 @@ void MqttClient::setup(void (*messageReceivedCallback)(char* topic, byte* payloa
     _connectedCallback = NULL;
     Serial.print("MQTT Server: ");
     Serial.println(_credentials.serverIp);
-    client.setServer(_credentials.serverIp.c_str(), _credentials.port);
-    client.setCallback(messageReceivedCallback);
+    this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
+    this->client.setCallback(messageReceivedCallback);
+}
+
+void MqttClient::setup()
+{
+    Serial.print("MQTT Server: ");
+    Serial.println(_credentials.serverIp);
 }
 
 void MqttClient::loop()

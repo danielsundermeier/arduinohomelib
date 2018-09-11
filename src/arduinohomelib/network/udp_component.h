@@ -8,7 +8,7 @@ class UdpComponent
 {
     public:
         UdpComponent();
-        UdpComponent(IPAddress ip);
+        UdpComponent(void (*callback)(char*), IPAddress ip);
         void setup();
         void setup(void (*callback)(char*));
         void loop();

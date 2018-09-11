@@ -2,21 +2,27 @@
 
 MomentaryButton::MomentaryButton() {}
 
-MomentaryButton::MomentaryButton(uint8_t pin)
+MomentaryButton::MomentaryButton(int pin)
 {
     setPin(pin);
 }
 
-void MomentaryButton::setPin(uint8_t pin)
+MomentaryButton::MomentaryButton(int pin, int relaisPin)
+{
+    setPin(pin);
+    _relaisPin = relaisPin;
+}
+
+void MomentaryButton::setPin(int pin)
 {
     _bouncer = Bounce();
     _bouncer.attach(pin, INPUT_PULLUP);
     _bouncer.interval(BOUNCER_INTERVAL);
     _pin = pin;
-    _topic = "switch-controller-1/" + String(_pin) + "/";
+    _topic = String(Settings::name) + "/" + String(_pin) + "/";
 }
 
-void MomentaryButton::setRelaisPin(uint8_t pin)
+void MomentaryButton::setRelaisPin(int pin)
 {
     _relaisPin = pin;
 }

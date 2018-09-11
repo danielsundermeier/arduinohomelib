@@ -6,11 +6,12 @@
 class EthernetComponent
 {
     public:
-        EthernetComponent();
-        void setup(byte* mac);
+        EthernetComponent(byte* mac);
+        void setup();
         void loop();
         EthernetClient getClient() const;
     private:
+        byte* mac;
         EthernetClient client;
 };
 

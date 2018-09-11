@@ -25,15 +25,16 @@ class Application
 
     public:
         EthernetComponent *ethernet{nullptr};
-        EthernetComponent *initEthernet();
-        MqttClient *initMqtt(String serverId, String username, String password);
+        EthernetComponent *initEthernet(byte* mac);
+        MqttClient *initMqtt(String serverId, String username, String password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)());
         MqttClient *mqtt{nullptr};
         UdpComponent *udp{nullptr};
-        UdpComponent *initUdp(IPAddress receiverIp);
+        UdpComponent *initUdp(void (*callback)(char*), IPAddress receiverIp);
         void setName(const char* name);
         void setup();
         void loop();
-        void makeMomentaryButton(uint8_t pin);
+        void makeMomentaryButton(int pin);
+        void makeMomentaryButton(int pin, int relaisPin);
 };
 
 extern Application App;
