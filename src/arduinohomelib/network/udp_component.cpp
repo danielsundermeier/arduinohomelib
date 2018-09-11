@@ -9,6 +9,7 @@ UdpComponent::UdpComponent(IPAddress ip)
 {
     _callback = NULL;
     _sendToIp = ip;
+    globalUdpComponent = this;
 }
 
 void UdpComponent::setup()
@@ -73,3 +74,5 @@ void UdpComponent::setCallback(void (*callback)(char*))
 {
     _callback = callback;
 }
+
+UdpComponent *globalUdpComponent = nullptr;

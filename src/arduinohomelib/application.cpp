@@ -9,6 +9,13 @@ void Application::setup()
 
     Serial.print("Start ");
     Serial.println(Settings::name);
+
+    for (uint32_t i = 0; i < this->components.size(); i++) {
+        //Component *component = this->components[i];
+
+        //component->setup();
+        this->components[i]->setup();
+    }
 }
 
 void Application::loop()
@@ -44,6 +51,13 @@ UdpComponent *Application::initUdp(IPAddress receiverIp)
     this->udp = udp;
 
     return this->udp;
+}
+
+void Application::makeMomentaryButton(uint8_t pin)
+{
+    this->registerComponent(
+        new MomentaryButton(pin)
+    );
 }
 
 Application App;

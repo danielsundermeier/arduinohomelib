@@ -27,4 +27,6 @@ class UdpComponent
         void defaultCallback(char* message);
 };
 
+extern UdpComponent *globalUdpComponent;
+
 #endif

@@ -95,7 +95,14 @@ int MomentaryButton::getEvent()
     return event;
 }
 
-void MomentaryButton::check()
+void MomentaryButton::setup()
+{
+    Serial.print("Momentary Button ");
+    Serial.print(_pin);
+    Serial.println(" setup");
+}
+
+void MomentaryButton::loop()
 {
     switch (getEvent()) {
         case EVENT_CLICK: click(); break;
@@ -110,8 +117,8 @@ void MomentaryButton::click()
     handleClick(EVENT_CLICK);
     if (_relaisPin > 0)
     {
-        Serial.println(String(relaisControllerIp[0]) + "." + String(relaisControllerIp[1]) + "." + String(relaisControllerIp[2]) + "." + String(relaisControllerIp[3]));
-        Udp.send(String(_relaisPin));
+        Serial.println(String(receiverIp[0]) + "." + String(receiverIp[1]) + "." + String(receiverIp[2]) + "." + String(receiverIp[3]));
+        globalUdpComponent->send(String(_relaisPin));
     }
 }
 
@@ -140,5 +147,5 @@ void MomentaryButton::publish(unsigned short int eventType)
 {
     String topic = _topic + EVENT_TYPES[eventType];
     Serial.println(topic);
-    mqttClient.publish(topic.c_str(), "ON");
+    globalMqttClient->publish(topic.c_str(), "ON");
 }

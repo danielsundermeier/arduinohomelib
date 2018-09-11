@@ -3,7 +3,8 @@
 
 #include <Bounce2.h>
 #include <Ethernet.h>
-#include <PubSubClient.h>
+#include "arduinohomelib/component.h"
+#include "arduinohomelib/mqtt/mqtt_client.h"
 #include "arduinohomelib/network/udp_component.h"
 
 #define DC_GAP 250
@@ -17,13 +18,14 @@ const short int EVENT_LONGHOLD =4;
 
 const String EVENT_TYPES[5] = {"", "click", "doubleclick", "hold", "longhold"};
 
-class MomentaryButton
+class MomentaryButton : public Component
 {
     public:
         const int BOUNCER_INTERVAL = 25;
         MomentaryButton();
         MomentaryButton(uint8_t pin);
-        void check();
+        void setup() override;
+        void loop() override;
         void setPin(uint8_t pin);
         void setRelaisPin(uint8_t pin);
     private:
@@ -49,9 +51,8 @@ class MomentaryButton
         void publish(unsigned short int eventType);
 };
 
-extern EthernetClient ethernetClient;
-extern PubSubClient mqttClient;
-extern IPAddress relaisControllerIp;
-extern UdpComponent Udp;
+extern MqttClient *globalMqttClient;
+extern UdpComponent *globalUdpComponent;
+extern IPAddress receiverIp;
 
 #endif
