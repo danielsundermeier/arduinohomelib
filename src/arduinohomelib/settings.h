@@ -5,6 +5,7 @@ class Settings
 {
     public:
         static const char* name;
+        static const char* mqttDiscoveryPrefix;
 };
 
 #endif

@@ -63,9 +63,9 @@ bool MqttClient::connect()
         Serial.println("MQTT verbunden");
         if (_connectedCallback != NULL)
         {
-           available();
            _connectedCallback();
         }
+        available();
     }
     else
     {

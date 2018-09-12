@@ -5,6 +5,8 @@ PubSubClient pubSubClient(ethClient);
 
 void Application::setup()
 {
+    componentsCount = components.size();
+
     Serial.begin(9600);
 
     Serial.print("Start ");
@@ -25,7 +27,7 @@ void Application::setup()
         this->udp->setup();
     }
 
-    for (uint32_t i = 0; i < this->components.size(); i++) {
+    for (uint32_t i = 0; i < componentsCount; i++) {
         //Component *component = this->components[i];
         //component->setup();
         this->components[i]->setup();
@@ -49,11 +51,16 @@ void Application::loop()
         this->udp->loop();
     }
 
-    for (uint32_t i = 0; i < this->components.size(); i++) {
+    for (uint32_t i = 0; i < componentsCount; i++) {
         //Component *component = this->components[i];
         //component->loop();
         this->components[i]->loop();
     }
+}
+
+uint8_t Application::getComponentsCount() const
+{
+    return componentsCount;
 }
 
 void Application::setName(const char* name)
@@ -97,6 +104,13 @@ void Application::makeMomentaryButton(int pin, int relaisPin)
 {
     this->registerComponent(
         new MomentaryButton(pin, relaisPin)
+    );
+}
+
+void Application::makeSwitch(int pin)
+{
+    this->registerComponent(
+        new Switch(pin)
     );
 }
 

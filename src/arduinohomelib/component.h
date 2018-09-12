@@ -1,6 +1,7 @@
 #ifndef ARDUINOHOMELIB_COMPONENT_H
 #define ARDUINOHOMELIB_COMPONENT_H
 
+#include <Arduino.h>
 #include "arduinohomelib/settings.h"
 
 class Component
@@ -9,6 +10,12 @@ class Component
         Component();
         virtual void setup();
         virtual void loop();
+        virtual void on();
+        virtual void off();
+        virtual void subscribe();
+        virtual String getCommandTopic();
+    protected:
+        String _commandTopic;
 };
 
 #endif
