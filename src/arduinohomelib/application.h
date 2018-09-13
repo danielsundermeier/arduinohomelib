@@ -24,6 +24,7 @@ class Application
         C *registerComponent(C *c);
 
     public:
+        Application();
         std::vector<Component*> components{};
         EthernetComponent *ethernet{nullptr};
         EthernetComponent *initEthernet(byte* mac);

@@ -106,6 +106,9 @@ void MomentaryButton::setup()
     Serial.print("Momentary Button ");
     Serial.print(_pin);
     Serial.println(" setup");
+
+    // this->setInterval("interval", 2000, []() { Serial.println("Interval Function"); });
+    // this->setTimeout("timeout", 3000, []() { Serial.println("Timeout Function"); });
 }
 
 void MomentaryButton::loop()

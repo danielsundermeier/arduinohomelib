@@ -3,6 +3,11 @@
 EthernetClient ethClient;
 PubSubClient pubSubClient(ethClient);
 
+Application::Application()
+{
+    randomSeed(analogRead(0));
+}
+
 void Application::setup()
 {
     componentsCount = components.size();
@@ -30,7 +35,7 @@ void Application::setup()
     for (uint32_t i = 0; i < componentsCount; i++) {
         //Component *component = this->components[i];
         //component->setup();
-        this->components[i]->setup();
+        this->components[i]->setup_();
     }
 }
 
@@ -54,7 +59,7 @@ void Application::loop()
     for (uint32_t i = 0; i < componentsCount; i++) {
         //Component *component = this->components[i];
         //component->loop();
-        this->components[i]->loop();
+        this->components[i]->loop_();
     }
 }
 
