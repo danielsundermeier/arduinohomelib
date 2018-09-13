@@ -62,6 +62,18 @@ void Switch::subscribe()
     }
 }
 
+void Switch::handleMqttMessage(String cmd)
+{
+    if (strcmp(cmd.c_str(), "ON") == 0)
+    {
+        on();
+    }
+    else if (strcmp(cmd.c_str(), "OFF") == 0)
+    {
+        off();
+    }
+}
+
 void Switch::setDiscoveryInfo()
 {
     _discoveryInfo["platform"] = "mqtt";

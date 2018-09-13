@@ -17,7 +17,7 @@ class Switch : public Component
         void toggle();
         void subscribe();
         void discover();
-
+        void handleMqttMessage(String cmd);
     private:
         bool isDiscovered = false;
         const char* _device = "switch";

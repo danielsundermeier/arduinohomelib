@@ -58,6 +58,25 @@ void Application::loop()
     }
 }
 
+void Application::handleMqttMessage(char* topic, byte* payload, unsigned int length)
+{
+    Serial.print("MQTT Received [");
+    Serial.print(topic);
+    Serial.print("] ");
+    String cmd = "";
+    for (unsigned int i=0;i<length;i++)
+    {
+        cmd += (char)payload[i];
+    }
+    Serial.println(cmd);
+    for (uint32_t i = 0; i < componentsCount; i++) {
+        if (strcmp(topic, App.components[i]->getCommandTopic().c_str()) == 0)
+        {
+            this->components[i]->handleMqttMessage(cmd);
+        }
+    }
+}
+
 uint8_t Application::getComponentsCount() const
 {
     return componentsCount;

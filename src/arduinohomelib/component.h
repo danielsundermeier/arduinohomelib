@@ -14,6 +14,7 @@ class Component
         virtual void off();
         virtual void subscribe();
         virtual String getCommandTopic();
+        virtual void handleMqttMessage(String cmd);
     protected:
         String _commandTopic;
 };

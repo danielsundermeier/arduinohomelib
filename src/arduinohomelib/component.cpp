@@ -27,6 +27,11 @@ void Component::subscribe()
 
 }
 
+void Component::handleMqttMessage(String cmd)
+{
+    Serial.println(cmd);
+}
+
 String Component::getCommandTopic()
 {
     return _commandTopic;

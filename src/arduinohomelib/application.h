@@ -37,6 +37,7 @@ class Application
         void setName(const char* name);
         void setup();
         void loop();
+        void handleMqttMessage(char* topic, byte* payload, unsigned int length);
 
         void makeMomentaryButton(int pin);
         void makeMomentaryButton(int pin, int relaisPin);
