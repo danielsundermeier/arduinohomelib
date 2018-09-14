@@ -3,6 +3,7 @@
 MqttClient::MqttClient(PubSubClient client, const MQTTCredentials &credentials, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)()) : _credentials(credentials)
 {
 
+    _debugTopic = _credentials.clientId + "/debug";
     _statusTopic = _credentials.clientId + "/status";
     this->client = client;
     this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
@@ -33,16 +34,14 @@ void MqttClient::setup(void (*messageReceivedCallback)(char* topic, byte* payloa
 void MqttClient::setup(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length))
 {
     _connectedCallback = NULL;
-    Serial.print("MQTT Server: ");
-    Serial.println(_credentials.serverIp);
+    Logger->debug("mqtt", "Server\t%s", _credentials.serverIp.c_str());
     this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
     this->client.setCallback(messageReceivedCallback);
 }
 
 void MqttClient::setup()
 {
-    Serial.print("MQTT Server: ");
-    Serial.println(_credentials.serverIp);
+    Logger->debug("mqtt", "Server\t%s", _credentials.serverIp.c_str());
 }
 
 void MqttClient::loop()
@@ -60,7 +59,7 @@ bool MqttClient::connect()
 {
     if (client.connect(_credentials.clientId.c_str(), _credentials.username.c_str(), _credentials.password.c_str(), _statusTopic.c_str(), 1, 0, "offline"))
     {
-        Serial.println("MQTT verbunden");
+        Logger->debug("mqtt", "Verbunden");
         if (_connectedCallback != NULL)
         {
            _connectedCallback();
@@ -69,7 +68,7 @@ bool MqttClient::connect()
     }
     else
     {
-        Serial.println("MQTT nicht verbunden");
+        Logger->debug("mqtt", "Nicht verbunden");
     }
 
     isConnected = client.connected();
@@ -79,10 +78,7 @@ bool MqttClient::connect()
 
 bool MqttClient::publish(const char* topic, const char* payload)
 {
-    Serial.print("MQTT Publish [");
-    Serial.print(topic);
-    Serial.print("] ");
-    Serial.println(payload);
+    Logger->debug("mqtt", "Publish\t[%s]\t%s", topic, payload);
 
     return client.publish(topic, payload);
 }
@@ -97,11 +93,14 @@ bool MqttClient::publish(const char* topic, JsonObject& data)
 
 bool MqttClient::subscribe(const char* topic)
 {
-    Serial.print("MQTT Subscribe [");
-    Serial.print(topic);
-    Serial.println("]");
+    Logger->debug("mqtt", "Subscribed\t[%s]", topic);
 
     return client.subscribe(topic);
+}
+
+bool MqttClient::log(const char* payload)
+{
+    return publish(_debugTopic.c_str(), payload);
 }
 
 void MqttClient::available()

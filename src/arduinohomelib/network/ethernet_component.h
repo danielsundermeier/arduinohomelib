@@ -2,6 +2,7 @@
 #define ARDUINOHOMELIB_ETHERNET_COMPONENT_H
 
 #include <Ethernet.h>
+#include "arduinohomelib/log_component.h"
 
 class EthernetComponent
 {

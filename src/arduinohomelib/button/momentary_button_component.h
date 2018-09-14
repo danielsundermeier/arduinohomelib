@@ -4,6 +4,7 @@
 #include <Bounce2.h>
 #include <Ethernet.h>
 #include "arduinohomelib/component.h"
+#include "arduinohomelib/log_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"
 #include "arduinohomelib/network/udp_component.h"
 

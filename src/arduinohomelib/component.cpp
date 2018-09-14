@@ -45,7 +45,7 @@ String Component::getCommandTopic()
 }
 void Component::handleMqttMessage(String cmd)
 {
-    Serial.println(cmd);
+
 }
 
 bool Component::cancelTimeFunction(const std::string &name, TimeFunction::Type type)

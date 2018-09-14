@@ -37,10 +37,9 @@ void UdpComponent::receive()
     {
         memset(packetBuffer, 0, sizeof(packetBuffer));
         UdpClient.read(packetBuffer, UDP_TX_PACKET_MAX_SIZE);
-        Serial.print("UDP Received [");
-        Serial.print(UdpClient.remoteIP());
-        Serial. print("] ");
-        Serial.println(packetBuffer);
+        IPAddress ip = UdpClient.remoteIP();
+        Logger->debug("udp", "Received\t[%d.%d.%d.%d]\t%s", ip[0], ip[1], ip[2], ip[3], packetBuffer);
+
         if (_callback != NULL)
         {
             _callback(packetBuffer);
@@ -55,10 +54,7 @@ void UdpComponent::send(String message)
 
 void UdpComponent::send(IPAddress destinationIp, String message)
 {
-    Serial.print("UTP Send [");
-    Serial.print(destinationIp);
-    Serial.print("] ");
-    Serial.println(message);
+    Logger->debug("udp", "Send\t[%d.%d.%d.%d]\t%s", destinationIp[0], destinationIp[1], destinationIp[2], destinationIp[3], message.c_str());
 
     UdpClient.beginPacket(destinationIp, port);
     UdpClient.print(message);

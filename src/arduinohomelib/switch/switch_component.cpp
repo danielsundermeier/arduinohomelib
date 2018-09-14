@@ -40,10 +40,8 @@ void Switch::toggle()
 
 void Switch::write(int value)
 {
-    Serial.print("Schalte Switch ");
-    Serial.print(_pin);
-    Serial.print(" ");
-    Serial.println(value);
+    Logger->debug("switch", "Schalte\t[%2d]\t%d", _pin, value);
+
     digitalWrite(_pin, value);
     globalMqttClient->publish(_stateTopic.c_str(), (read() == 1 ? "ON" : "OFF"));
 }
@@ -92,6 +90,6 @@ void Switch::discover()
     }
     else
     {
-        Serial.println("Error sending discovery");
+        Logger->debug("switch", "Error sending discovery");
     }
 }

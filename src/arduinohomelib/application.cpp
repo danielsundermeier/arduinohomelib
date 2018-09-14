@@ -12,10 +12,7 @@ void Application::setup()
 {
     componentsCount = components.size();
 
-    Serial.begin(9600);
-
-    Serial.print("Start ");
-    Serial.println(Settings::name);
+    Logger->debug("application", "Start %s", Settings::name);
 
     if (this->ethernet != nullptr)
     {
@@ -33,7 +30,7 @@ void Application::setup()
     }
 
     for (uint32_t i = 0; i < componentsCount; i++) {
-        //Component *component = this->components[i];
+        //Component* component = this->components[i];
         //component->setup();
         this->components[i]->setup_();
     }
@@ -57,7 +54,7 @@ void Application::loop()
     }
 
     for (uint32_t i = 0; i < componentsCount; i++) {
-        //Component *component = this->components[i];
+        //Component* component = this->components[i];
         //component->loop();
         this->components[i]->loop_();
     }
@@ -65,15 +62,12 @@ void Application::loop()
 
 void Application::handleMqttMessage(char* topic, byte* payload, unsigned int length)
 {
-    Serial.print("MQTT Received [");
-    Serial.print(topic);
-    Serial.print("] ");
     String cmd = "";
     for (unsigned int i=0;i<length;i++)
     {
         cmd += (char)payload[i];
     }
-    Serial.println(cmd);
+    Logger->debug("mqtt", "Received\t[%s]\t%s", topic, cmd.c_str());
     for (uint32_t i = 0; i < componentsCount; i++) {
         if (strcmp(topic, App.components[i]->getCommandTopic().c_str()) == 0)
         {
@@ -92,48 +86,51 @@ void Application::setName(const char* name)
     Settings::name = name;
 }
 
-EthernetComponent *Application::initEthernet(byte* mac)
+LogComponent* Application::initLog()
 {
-    auto *ethernet = new EthernetComponent(mac);
-    this->ethernet = ethernet;
+    this->log = new LogComponent();
+
+    return this->log;
+}
+
+EthernetComponent* Application::initEthernet(byte* mac)
+{
+    this->ethernet = new EthernetComponent(mac);
 
     return this->ethernet;
 }
 
-MqttClient *Application::initMqtt(String serverId, String username, String password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)())
+MqttClient* Application::initMqtt(String serverId, String username, String password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)())
 {
     struct MQTTCredentials credentials { serverId, 1883, username, password, Settings::name };
-    auto *mqtt = new MqttClient(pubSubClient, credentials, messageReceivedCallback, connectedCallback);
-    this->mqtt = mqtt;
+    this->mqtt = new MqttClient(pubSubClient, credentials, messageReceivedCallback, connectedCallback);
 
     return this->mqtt;
 }
 
-UdpComponent *Application::initUdp(void (*callback)(char*), IPAddress receiverIp)
+UdpComponent* Application::initUdp(void (*callback)(char*), IPAddress receiverIp)
 {
-    auto *udp = new UdpComponent(callback, receiverIp);
+    auto* udp = new UdpComponent(callback, receiverIp);
     this->udp = udp;
 
     return this->udp;
 }
 
-void Application::makeMomentaryButton(int pin)
+MomentaryButton* Application::makeMomentaryButton(int pin)
 {
-    this->registerComponent(
+    return this->registerComponent(
         new MomentaryButton(pin)
     );
 }
 
-void Application::makeMomentaryButton(int pin, int relaisPin)
+MomentaryButton* Application::makeMomentaryButton(int pin, int relaisPin)
 {
-    this->registerComponent(
-        new MomentaryButton(pin, relaisPin)
-    );
+    return this->registerComponent(new MomentaryButton(pin, relaisPin));
 }
 
-void Application::makeSwitch(int pin)
+Switch* Application::makeSwitch(int pin)
 {
-    this->registerComponent(
+    return this->registerComponent(
         new Switch(pin)
     );
 }

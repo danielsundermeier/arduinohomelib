@@ -10,7 +10,7 @@ MomentaryButton::MomentaryButton(int pin)
 MomentaryButton::MomentaryButton(int pin, int relaisPin)
 {
     setPin(pin);
-    _relaisPin = relaisPin;
+    setRelaisPin(relaisPin);
 }
 
 void MomentaryButton::setPin(int pin)
@@ -103,9 +103,7 @@ int MomentaryButton::getEvent()
 
 void MomentaryButton::setup()
 {
-    Serial.print("Momentary Button ");
-    Serial.print(_pin);
-    Serial.println(" setup");
+    Logger->debug("button.momentary", "Setup %2d", _pin);
 
     // this->setInterval("interval", 2000, []() { Serial.println("Interval Function"); });
     // this->setTimeout("timeout", 3000, []() { Serial.println("Timeout Function"); });
@@ -126,7 +124,6 @@ void MomentaryButton::click()
     handleClick(EVENT_CLICK);
     if (_relaisPin > 0)
     {
-        Serial.println(String(receiverIp[0]) + "." + String(receiverIp[1]) + "." + String(receiverIp[2]) + "." + String(receiverIp[3]));
         globalUdpComponent->send(String(_relaisPin));
     }
 }
@@ -148,13 +145,12 @@ void MomentaryButton::longHold()
 
 void MomentaryButton::handleClick(unsigned short int eventType)
 {
-    Serial.println("Button " + String(_pin) + " " + EVENT_TYPES[eventType]);
+    Logger->debug("button.momentary", "Button %2d\t%s", _pin, EVENT_TYPES[eventType].c_str());
     publish(eventType);
 }
 
 void MomentaryButton::publish(unsigned short int eventType)
 {
     String topic = _topic + EVENT_TYPES[eventType];
-    Serial.println(topic);
     globalMqttClient->publish(topic.c_str(), "ON");
 }

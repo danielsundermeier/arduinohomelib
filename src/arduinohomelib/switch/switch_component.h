@@ -2,6 +2,7 @@
 #define ARDUINOHOMELIB_SWITCH_COMPONENT_H
 
 #include "arduinohomelib/component.h"
+#include "arduinohomelib/log_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"
 
 const int BUFFER_SIZE = 300;

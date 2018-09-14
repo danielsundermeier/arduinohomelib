@@ -8,10 +8,11 @@ EthernetComponent::EthernetComponent(byte* mac)
 
 void EthernetComponent::setup()
 {
-    Serial.println("Ethernet Setup");
+    Logger->debug("ethernet", "Setup");
     Ethernet.begin(this->mac);
-    delay(1500);
-    Serial.println(Ethernet.localIP());
+    delay(1000);
+    IPAddress ip = Ethernet.localIP();
+    Logger->debug("ethernet", "IP\t%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
 }
 
 void EthernetComponent::loop()

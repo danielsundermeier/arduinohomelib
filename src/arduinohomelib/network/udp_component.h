@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Ethernet.h>
+#include "arduinohomelib/log_component.h"
 
 class UdpComponent
 {

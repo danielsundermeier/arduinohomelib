@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 #include <Ethernet.h>
 #include <PubSubClient.h>
+#include "arduinohomelib/log_component.h"
 
 struct MQTTCredentials {
     String serverIp; ///< The address of the server without port number
@@ -25,6 +26,8 @@ class MqttClient
         bool publish(const char* topic, const char* payload);
         bool publish(const char* topic, JsonObject& data);
         bool subscribe(const char* topic);
+        bool log(const char* payload);
+
         void setConnectedCallback(void (*connectedCallback)());
         void setMessageReceivedCallback(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length));
     private:
@@ -33,6 +36,7 @@ class MqttClient
         PubSubClient client;
         void (*_connectedCallback)();
         String _statusTopic;
+        String _debugTopic;
         void available();
         void unavailable();
 };
