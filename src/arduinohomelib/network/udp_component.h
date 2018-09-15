@@ -13,8 +13,9 @@ class UdpComponent
         void setup();
         void setup(void (*callback)(char*));
         void loop();
-        void send(String message);
-        void send(IPAddress destinationIp, String message);
+        void send(const char* message);
+        void send(IPAddress destinationIp, const char* message);
+        void sendCommand(int pin, const char* command);
         void responde();
         void responde(String message);
         void receive();

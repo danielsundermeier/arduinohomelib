@@ -18,7 +18,6 @@ class LogComponent : public Component
     public:
         LogComponent();
         int debug(const char *tag, const char *format, ...);
-        void setup() override;
     protected:
         char buffer [ARDUINOHOMELIB_LOG_BUFFER_SIZE];
         int log_sprinf(int level, const char *tag, const char *format, va_list args);

@@ -13,7 +13,10 @@
 #include "arduinohomelib/network/ethernet_component.h"
 #include "arduinohomelib/network/udp_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"
+
+#include "arduinohomelib/binary_sensor/hcsr501_component.h"
 #include "arduinohomelib/button/momentary_button_component.h"
+#include "arduinohomelib/sensor/max6675_component.h"
 #include "arduinohomelib/switch/switch_component.h"
 
 class Application
@@ -43,8 +46,12 @@ class Application
         void loop();
         void handleMqttMessage(char* topic, byte* payload, unsigned int length);
 
+        Hcsr501BinarySensor* makeHcsr501BinarySensor(int pin);
+
         MomentaryButton* makeMomentaryButton(int pin);
         MomentaryButton* makeMomentaryButton(int pin, int relaisPin);
+
+        Max6675Sensor* makeMax6675Sensor(int so, int cs, int clk);
 
         Switch* makeSwitch(int pin);
 };

@@ -7,11 +7,6 @@ LogComponent::LogComponent()
     Logger = this;
 }
 
-void LogComponent::setup()
-{
-
-}
-
 int LogComponent::debug(const char *tag, const char *format, ...)
 {
     va_list arg;

@@ -50,7 +50,6 @@ void MqttClient::loop()
     if (! isConnected)
     {
         connect();
-
     }
     client.loop();
 }

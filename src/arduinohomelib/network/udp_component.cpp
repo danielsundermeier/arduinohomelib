@@ -47,14 +47,21 @@ void UdpComponent::receive()
     }
 }
 
-void UdpComponent::send(String message)
+void UdpComponent::sendCommand(int pin, const char* command)
+{
+    char message [15];
+    sprintf(message, "%d:%s", pin, command);
+    send(_sendToIp, message);
+}
+
+void UdpComponent::send(const char* message)
 {
     send(_sendToIp, message);
 }
 
-void UdpComponent::send(IPAddress destinationIp, String message)
+void UdpComponent::send(IPAddress destinationIp, const char* message)
 {
-    Logger->debug("udp", "Send\t[%d.%d.%d.%d]\t%s", destinationIp[0], destinationIp[1], destinationIp[2], destinationIp[3], message.c_str());
+    Logger->debug("udp", "Send\t[%d.%d.%d.%d]\t%s", destinationIp[0], destinationIp[1], destinationIp[2], destinationIp[3], message);
 
     UdpClient.beginPacket(destinationIp, port);
     UdpClient.print(message);

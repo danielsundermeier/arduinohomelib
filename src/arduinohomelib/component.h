@@ -2,6 +2,7 @@
 #define ARDUINOHOMELIB_COMPONENT_H
 
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include <StandardCplusplus.h>
 #include <system_configuration.h>
 #include <unwind-cxx.h>
@@ -10,7 +11,10 @@
 #include <map>
 #include <string>
 #include <vector>
+
 #include "arduinohomelib/settings.h"
+
+const int ARDOINOHOMELIB_JSON_BUFFER_SIZE = 300;
 
 class Component
 {
@@ -18,22 +22,35 @@ class Component
         Component();
         void setup_();
         void loop_();
-        virtual void on();
-        virtual void off();
         virtual void setup();
         virtual void loop();
+
         virtual void subscribe();
         virtual String getCommandTopic();
+        virtual void handleMqttConnected();
         virtual void handleMqttMessage(String cmd);
 
         bool cancelInterval(const std::string &name);
         void setInterval(const std::string &name, uint32_t interval, void (*f)());
-        bool cancelTimeout(const std::string &name);
-        void setTimeout(const std::string &name, uint32_t timeout, void (*f)());
+        //bool cancelTimeout(const std::string &name);
+        //void setTimeout(const std::string &name, uint32_t timeout, void (*f)());
 
     protected:
-        String _commandTopic;
+        String friendlyName;
+        String id;
+        String fullId;
+
+        bool isDiscovered = false;
+        String commandTopic;
+        String stateTopic;
+        String discoveryTopic;
+
+        StaticJsonBuffer<ARDOINOHOMELIB_JSON_BUFFER_SIZE> JSONbuffer;
+        JsonObject& discoveryInfo = JSONbuffer.createObject();
+
         void loopInternal();
+
+        void setDiscoveryInfo();
 
         /// Internal struct for storing timeout/interval functions.
         struct TimeFunction

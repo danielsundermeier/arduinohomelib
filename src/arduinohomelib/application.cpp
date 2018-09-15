@@ -30,8 +30,6 @@ void Application::setup()
     }
 
     for (uint32_t i = 0; i < componentsCount; i++) {
-        //Component* component = this->components[i];
-        //component->setup();
         this->components[i]->setup_();
     }
 }
@@ -54,8 +52,6 @@ void Application::loop()
     }
 
     for (uint32_t i = 0; i < componentsCount; i++) {
-        //Component* component = this->components[i];
-        //component->loop();
         this->components[i]->loop_();
     }
 }
@@ -116,6 +112,13 @@ UdpComponent* Application::initUdp(void (*callback)(char*), IPAddress receiverIp
     return this->udp;
 }
 
+Hcsr501BinarySensor* Application::makeHcsr501BinarySensor(int pin)
+{
+    return this->registerComponent(
+        new Hcsr501BinarySensor(pin)
+    );
+}
+
 MomentaryButton* Application::makeMomentaryButton(int pin)
 {
     return this->registerComponent(
@@ -126,6 +129,13 @@ MomentaryButton* Application::makeMomentaryButton(int pin)
 MomentaryButton* Application::makeMomentaryButton(int pin, int relaisPin)
 {
     return this->registerComponent(new MomentaryButton(pin, relaisPin));
+}
+
+Max6675Sensor* Application::makeMax6675Sensor(int so, int cs, int clk)
+{
+    return this->registerComponent(
+        new Max6675Sensor(so, cs, clk)
+    );
 }
 
 Switch* Application::makeSwitch(int pin)

@@ -24,16 +24,6 @@ void Component::loop()
 
 }
 
-void Component::on()
-{
-
-}
-
-void Component::off()
-{
-
-}
-
 void Component::subscribe()
 {
 
@@ -41,9 +31,20 @@ void Component::subscribe()
 
 String Component::getCommandTopic()
 {
-    return _commandTopic;
+    return this->commandTopic;
 }
+
+void Component::handleMqttConnected()
+{
+
+}
+
 void Component::handleMqttMessage(String cmd)
+{
+
+}
+
+void Component::setDiscoveryInfo()
 {
 
 }
@@ -82,7 +83,7 @@ void Component::setInterval(const std::string &name, uint32_t interval, void (*f
     struct TimeFunction function { name, TimeFunction::INTERVAL, interval, millis() - interval - offset, f, false };
     this->timeFunctions.push_back(function);
 }
-
+/*
 bool Component::cancelTimeout(const std::string &name)
 {
     return this->cancelTimeFunction(name, TimeFunction::TIMEOUT);
@@ -94,7 +95,7 @@ void Component::setTimeout(const std::string &name, uint32_t timeout, void (*f)(
     struct TimeFunction function { name, TimeFunction::TIMEOUT, timeout, millis(), f, false };
     this->timeFunctions.push_back(function);
 }
-
+*/
 void Component::loopInternal()
 {
     for (unsigned int i = 0; i < this->timeFunctions.size(); i++)

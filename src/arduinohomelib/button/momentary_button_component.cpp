@@ -124,7 +124,7 @@ void MomentaryButton::click()
     handleClick(EVENT_CLICK);
     if (_relaisPin > 0)
     {
-        globalUdpComponent->send(String(_relaisPin));
+        globalUdpComponent->sendCommand(_relaisPin, "toggle");
     }
 }
 

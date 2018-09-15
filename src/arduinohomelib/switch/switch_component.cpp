@@ -9,16 +9,16 @@ Switch::Switch(int pin)
 
 void Switch::setPin(int pin)
 {
-    _pin = pin;
+    this->pin = pin;
     pinMode(pin, OUTPUT);
 
-    _friendlyName = "Switch " + String(_pin);
-    _id = "Switch_" + String(_pin);
-    _fullId = String(Settings::name) + "_" + _id;
+    this->friendlyName = "Switch " + String(this->pin);
+    this->id = "Switch_" + String(this->pin);
+    this->fullId = String(Settings::name) + "_" + this->id;
 
-    _commandTopic = String(Settings::name) + "/" + String(_pin) + "/set";
-    _stateTopic = String(Settings::name) + "/" + String(_pin) + "/state";
-    _discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + _device +"/" + _fullId + "/" + _id + "/config";
+    this->commandTopic = String(Settings::name) + "/" + String(this->pin) + "/set";
+    this->stateTopic = String(Settings::name) + "/" + String(this->pin) + "/state";
+    this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->id + "/config";
 
     setDiscoveryInfo();
 }
@@ -40,20 +40,25 @@ void Switch::toggle()
 
 void Switch::write(int value)
 {
-    Logger->debug("switch", "Schalte\t[%2d]\t%d", _pin, value);
+    Logger->debug("switch", "Schalte\t[%2d]\t%d", this->pin, value);
 
-    digitalWrite(_pin, value);
-    globalMqttClient->publish(_stateTopic.c_str(), (read() == 1 ? "ON" : "OFF"));
+    digitalWrite(this->pin, value);
+    globalMqttClient->publish(this->stateTopic.c_str(), (read() == 1 ? "ON" : "OFF"));
 }
 
 int Switch::read()
 {
-    return digitalRead(_pin);
+    return digitalRead(this->pin);
 }
 
 void Switch::subscribe()
 {
-    globalMqttClient->subscribe(_commandTopic.c_str());
+    globalMqttClient->subscribe(this->commandTopic.c_str());
+}
+
+void Switch::handleMqttConnected()
+{
+    this->subscribe();
     if (isDiscovered == false)
     {
         discover();
@@ -74,18 +79,18 @@ void Switch::handleMqttMessage(String cmd)
 
 void Switch::setDiscoveryInfo()
 {
-    _discoveryInfo["platform"] = "mqtt";
-    _discoveryInfo["name"] = _friendlyName;
-    _discoveryInfo["state_topic"] = _stateTopic;
-    _discoveryInfo["command_topic"] = _commandTopic;
-    _discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
+    this->discoveryInfo["platform"] = "mqtt";
+    this->discoveryInfo["name"] = this->friendlyName;
+    this->discoveryInfo["state_topic"] = this->stateTopic;
+    this->discoveryInfo["command_topic"] = this->commandTopic;
+    this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
 }
 
 void Switch::discover()
 {
-    if (globalMqttClient->publish(_discoveryTopic.c_str(), _discoveryInfo) == true)
+    if (globalMqttClient->publish(this->discoveryTopic.c_str(), this->discoveryInfo) == true)
     {
-        globalMqttClient->publish(_commandTopic.c_str(), "OFF");
+        globalMqttClient->publish(this->commandTopic.c_str(), "OFF");
         isDiscovered = true;
     }
     else
