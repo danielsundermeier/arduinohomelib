@@ -31,9 +31,11 @@ class Component
         virtual void handleMqttMessage(String cmd);
 
         bool cancelInterval(const std::string &name);
-        void setInterval(const std::string &name, uint32_t interval, void (*f)());
+        void setInterval(const std::string &name, uint32_t interval, Component *c);
+        virtual void handleInterval();
         //bool cancelTimeout(const std::string &name);
         //void setTimeout(const std::string &name, uint32_t timeout, void (*f)());
+        virtual void handleTimeout();
 
     protected:
         String friendlyName;
@@ -60,7 +62,7 @@ class Component
             uint32_t interval; ///< The interval/timeout of this function.
             /// The last execution for interval functions and the time, SetInterval was called, for timeout functions.
             uint32_t last_execution;
-            void (*f)(); ///< The function (or callback) itself.
+            Component *c; ///< The function (or callback) itself.
             bool remove;
 
             bool shouldRun(uint32_t now) const;

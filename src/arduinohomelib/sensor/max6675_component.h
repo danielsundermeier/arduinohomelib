@@ -1,7 +1,8 @@
 #ifndef ARDUINOHOMELIB_MAX6675_SENSOR_COMPONENT_H
 #define ARDUINOHOMELIB_MAX6675_SENSOR_COMPONENT_H
 
-#include <max6675.h>
+#include <SPI.h>
+#include "max6675.h"
 #include "arduinohomelib/component.h"
 #include "arduinohomelib/log_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"
@@ -13,6 +14,8 @@ class Max6675Sensor : public Component
         void setup() override;
 
         void update();
+
+         void handleInterval() override;
 
     protected:
         int soPin;

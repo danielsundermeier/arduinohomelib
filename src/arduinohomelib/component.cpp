@@ -72,7 +72,7 @@ bool Component::cancelInterval(const std::string &name)
     return this->cancelTimeFunction(name, TimeFunction::INTERVAL);
 }
 
-void Component::setInterval(const std::string &name, uint32_t interval, void (*f)())
+void Component::setInterval(const std::string &name, uint32_t interval, Component *c)
 {
     int offset = 0;
     if (interval != 0)
@@ -80,8 +80,18 @@ void Component::setInterval(const std::string &name, uint32_t interval, void (*f
         offset = (random(65535) % interval) / 2;
     }
     this->cancelInterval(name);
-    struct TimeFunction function { name, TimeFunction::INTERVAL, interval, millis() - interval - offset, f, false };
+    struct TimeFunction function { name, TimeFunction::INTERVAL, interval, millis() - interval - offset, c, false };
     this->timeFunctions.push_back(function);
+}
+
+void Component::handleInterval()
+{
+    Serial.println("Interval Default");
+}
+
+void Component::handleTimeout()
+{
+    Serial.println("Timeout Default");
 }
 /*
 bool Component::cancelTimeout(const std::string &name)
@@ -104,7 +114,15 @@ void Component::loopInternal()
         TimeFunction *tf = &this->timeFunctions[i];
         if (tf->shouldRun(now))
         {
-            tf->f();
+            if (tf->type == TimeFunction::INTERVAL)
+            {
+                tf->c->handleInterval();
+            }
+            else if (tf->type == TimeFunction::TIMEOUT)
+            {
+                tf->c->handleTimeout();
+            }
+
             tf = &this->timeFunctions[i];
 
             if (tf->type == TimeFunction::INTERVAL && tf->interval != 0)
