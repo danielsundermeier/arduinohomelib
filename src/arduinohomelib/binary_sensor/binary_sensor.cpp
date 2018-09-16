@@ -62,7 +62,7 @@ void BinarySensor::discover()
     }
     else
     {
-        Logger->debug("switch", "Error sending discovery");
+        Logger->debug("binary_sensor", "Error sending discovery");
     }
 }
 

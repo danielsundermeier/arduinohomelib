@@ -17,6 +17,7 @@
 #include "arduinohomelib/binary_sensor/hcsr501_component.h"
 #include "arduinohomelib/button/momentary_button_component.h"
 #include "arduinohomelib/sensor/max6675_component.h"
+#include "arduinohomelib/sensor/temt6000_component.h"
 #include "arduinohomelib/switch/switch_component.h"
 
 class Application
@@ -52,6 +53,7 @@ class Application
         MomentaryButton* makeMomentaryButton(int pin, int relaisPin);
 
         Max6675Sensor* makeMax6675Sensor(int so, int cs, int clk);
+        Temt6000Sensor* makeTemt6000Sensor(int pin);
 
         Switch* makeSwitch(int pin);
 };

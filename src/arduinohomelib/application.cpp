@@ -138,6 +138,13 @@ Max6675Sensor* Application::makeMax6675Sensor(int so, int cs, int clk)
     );
 }
 
+Temt6000Sensor* Application::makeTemt6000Sensor(int pin)
+{
+    return this->registerComponent(
+        new Temt6000Sensor(pin)
+    );
+}
+
 Switch* Application::makeSwitch(int pin)
 {
     return this->registerComponent(
