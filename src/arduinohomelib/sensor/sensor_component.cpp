@@ -2,10 +2,7 @@
 
 SensorComponent::SensorComponent() {}
 
-void SensorComponent::update()
-{
-
-}
+void SensorComponent::update() {}
 
 void SensorComponent::handleInterval()
 {
@@ -54,7 +51,9 @@ void SensorComponent::newRawValue(double rawValue)
 
     this->value = calculateAverage();
     this->valueStr[0] = '\0';
-    dtostrf(this->value, 4, 2, &this->valueStr[strlen(this->valueStr)]);
+    this->rawValueStr[0] = '\0';
+    dtostrf(this->value, 4, this->getAccuracyDecimals(), &this->valueStr[strlen(this->valueStr)]);
+    dtostrf(this->rawValue, 4, this->getAccuracyDecimals(), &this->rawValueStr[strlen(this->rawValueStr)]);
 }
 
 double SensorComponent::calculateAverage()
@@ -70,22 +69,33 @@ double SensorComponent::calculateAverage()
 void SensorComponent::setDiscoveryInfo()
 {
     this->discoveryInfo["platform"] = "mqtt";
-    this->discoveryInfo["device_class"] = this->getDeviceClass();
     this->discoveryInfo["name"] = this->friendlyName;
     this->discoveryInfo["unique_id"] = this->fullId;
     this->discoveryInfo["state_topic"] = this->stateTopic;
     this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
     this->discoveryInfo["expire_after"] = this->getUpdateInterval() * this->valuesSendCount / 1000;
+    if (this->getDeviceClass() != "")
+    {
+        this->discoveryInfo["device_class"] = this->getDeviceClass();
+    }
+    if (this->getIcon() != "")
+    {
+        this->discoveryInfo["icon"] = this->getIcon();
+    }
+    if (this->getUnitOfMeassurement() != "")
+    {
+        this->discoveryInfo["unit_of_measurement"] = this->getUnitOfMeassurement();
+    }
 }
 
-void SensorComponent::setUpdateInterval(int updateInterval)
+void SensorComponent::setUpdateInterval(unsigned int updateInterval)
 {
     this->updateInterval = updateInterval;
 }
 
-int SensorComponent::getUpdateInterval() const
+void SensorComponent::setAccuracyDecimals(short unsigned int accuracyDecimals)
 {
-    return this->updateInterval;
+    this->accuracyDecimals = accuracyDecimals;
 }
 
 void SensorComponent::setDeviceClass(String deviceClass)
@@ -93,7 +103,12 @@ void SensorComponent::setDeviceClass(String deviceClass)
     this->deviceClass = deviceClass;
 }
 
-String SensorComponent::getDeviceClass() const
+void SensorComponent::setIcon(String icon)
 {
-    return this->deviceClass;
+    this->icon = icon;
+}
+
+void SensorComponent::setUnitOfMeassurement(String unitOfMeassurement)
+{
+    this->unitOfMeassurement = unitOfMeassurement;
 }

@@ -18,23 +18,30 @@ class SensorComponent : public Component
 
         void discover();
         void handleMqttConnected();
-        void sendValue();
+        virtual void sendValue();
 
         // TODO
         // bool shouldSend() ?
 
-        void setUpdateInterval(int updateInterval);
+        void setUpdateInterval(unsigned int updateInterval);
         void setDeviceClass(String deviceClass);
+        void setIcon(String icon);
+        void setUnitOfMeassurement(String unitOfMeassurement);
+        void setAccuracyDecimals(short unsigned int accuracyDecimals);
 
     protected:
-        const char* device = "sensor";
-        String deviceClass;
-
         int pin;
 
+        const char* device = "sensor";
+        String deviceClass = "";
+        String icon = "";
+        String unitOfMeassurement = "";
+        short unsigned int accuracyDecimals;
+
         char valueStr[10];
-        double value;
-        double rawValue;
+        char rawValueStr[10];
+        double value = 0;
+        double rawValue = 0;
 
         // Number of new Values until sendState()
         unsigned int valuesSendCount = 5;
@@ -45,13 +52,17 @@ class SensorComponent : public Component
         std::queue<double> values;
         double sum = 0;
 
-        int updateInterval = 2000;
+        unsigned int updateInterval = 2000;
 
         void newRawValue(double rawValue);
         double calculateAverage();
 
-        virtual int getUpdateInterval() const;
-        virtual String getDeviceClass() const;
+        virtual unsigned int getUpdateInterval() const { return this->updateInterval; }
+        virtual short unsigned int getAccuracyDecimals() const { return this->accuracyDecimals; }
+        virtual String getDeviceClass() const { return this->deviceClass; }
+        virtual String getIcon() const { return this->icon; }
+        virtual String getUnitOfMeassurement() const { return this->unitOfMeassurement; }
+
 
         void setDiscoveryInfo();
 };

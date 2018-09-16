@@ -23,14 +23,12 @@ void Temt6000Sensor::setup()
 
 void Temt6000Sensor::update()
 {
-    //this->value = analogRead(this->pin);
-    this->rawValue = (analogRead(pin) / 10000.0) * 2000000.0;
-    this->newRawValue(this->rawValue);
+    this->newRawValue((analogRead(pin) / 10000.0) * 2000000.0);
 
     if (this->valuesCount >= this->valuesSendCount)
     {
         this->sendValue();
         this->valuesCount = 0;
     }
-    Logger->debug("sensor.temt6000", "New Value: %s", this->valueStr);
+    Logger->debug("sensor.temt6000", "New Value: %s", this->rawValueStr);
 }
