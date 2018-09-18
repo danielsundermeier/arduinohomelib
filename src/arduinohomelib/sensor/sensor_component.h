@@ -7,10 +7,10 @@
 #include "arduinohomelib/log_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"
 
-class SensorComponent : public Component
+class SensorComponent : public Component, public Nameable
 {
     public:
-        SensorComponent();
+        SensorComponent(String name);
 
         virtual void update();
 
@@ -29,6 +29,8 @@ class SensorComponent : public Component
         void setUnitOfMeassurement(String unitOfMeassurement);
         void setAccuracyDecimals(short unsigned int accuracyDecimals);
 
+        void setValuesSendCount(unsigned int valuesSendCount);
+
     protected:
         int pin;
 
@@ -36,7 +38,7 @@ class SensorComponent : public Component
         String deviceClass = "";
         String icon = "";
         String unitOfMeassurement = "";
-        short unsigned int accuracyDecimals;
+        short unsigned int accuracyDecimals = 2;
 
         char valueStr[10];
         char rawValueStr[10];
@@ -56,6 +58,9 @@ class SensorComponent : public Component
 
         void newRawValue(double rawValue);
         double calculateAverage();
+
+        void setValueStr();
+        void setRawValueStr();
 
         virtual unsigned int getUpdateInterval() const { return this->updateInterval; }
         virtual short unsigned int getAccuracyDecimals() const { return this->accuracyDecimals; }

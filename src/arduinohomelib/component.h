@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+#include "arduinohomelib/helpers.h"
 #include "arduinohomelib/settings.h"
 
 const int ARDOINOHOMELIB_JSON_BUFFER_SIZE = 300;
@@ -39,7 +40,6 @@ class Component
 
     protected:
         String friendlyName;
-        String id;
         String fullId;
 
         bool isDiscovered = false;
@@ -71,6 +71,20 @@ class Component
         bool cancelTimeFunction(const std::string &name, TimeFunction::Type type);
 
         std::vector<TimeFunction> timeFunctions;
+};
+
+class Nameable
+{
+    public:
+        explicit Nameable(String name);
+
+        void setName(String name);
+
+        String getName() const { return this->name; }
+        String getId() const { return this->id; }
+    protected:
+        String id;
+        String name;
 };
 
 #endif

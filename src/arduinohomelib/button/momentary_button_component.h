@@ -19,13 +19,13 @@ const short int EVENT_LONGHOLD =4;
 
 const String EVENT_TYPES[5] = {"", "click", "doubleclick", "hold", "longhold"};
 
-class MomentaryButton : public Component
+class MomentaryButton : public Component, public Nameable
 {
     public:
         const int BOUNCER_INTERVAL = 25;
-        MomentaryButton();
-        MomentaryButton(int pin);
-        MomentaryButton(int pin, int relaisPin);
+        MomentaryButton(String name);
+        MomentaryButton(String name, int pin);
+        MomentaryButton(String name, int pin, int relaisPin);
         void setup() override;
         void loop() override;
         void setPin(int pin);

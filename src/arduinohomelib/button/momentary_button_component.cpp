@@ -1,13 +1,13 @@
 #include "arduinohomelib/button/momentary_button_component.h"
 
-MomentaryButton::MomentaryButton() {}
+MomentaryButton::MomentaryButton(String name) : Nameable(name) {}
 
-MomentaryButton::MomentaryButton(int pin)
+MomentaryButton::MomentaryButton(String name, int pin) : Nameable(name)
 {
     setPin(pin);
 }
 
-MomentaryButton::MomentaryButton(int pin, int relaisPin)
+MomentaryButton::MomentaryButton(String name, int pin, int relaisPin) : Nameable(name)
 {
     setPin(pin);
     setRelaisPin(relaisPin);

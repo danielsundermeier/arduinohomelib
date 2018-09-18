@@ -159,3 +159,14 @@ bool Component::TimeFunction::shouldRun(uint32_t now) const
 
     return this->interval != 4294967295UL && now - this->last_execution > this->interval;
 }
+
+Nameable::Nameable(String name)
+{
+    setName(name);
+}
+
+void Nameable::setName(String name)
+{
+    this->name = name;
+    this->id = toKebabCase(name);
+}

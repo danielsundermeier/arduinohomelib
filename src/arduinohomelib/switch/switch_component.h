@@ -5,11 +5,11 @@
 #include "arduinohomelib/log_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"
 
-class Switch : public Component
+class Switch : public Component, public Nameable
 {
     public:
-        Switch();
-        Switch(int pin);
+        Switch(String name);
+        Switch(String name, int pin);
         void setPin(int pin);
 
         void on();

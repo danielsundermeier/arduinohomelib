@@ -5,10 +5,10 @@
 #include "arduinohomelib/log_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"
 
-class BinarySensor : public Component
+class BinarySensor : public Component, public Nameable
 {
     public:
-        BinarySensor(int pin);
+        BinarySensor(String name, int pin);
 
         void setup();
         void loop();

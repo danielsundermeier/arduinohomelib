@@ -1,6 +1,6 @@
 #include "arduinohomelib/sensor/sensor_component.h"
 
-SensorComponent::SensorComponent() {}
+SensorComponent::SensorComponent(String name) : Nameable(name) {}
 
 void SensorComponent::update() {}
 
@@ -13,6 +13,7 @@ void SensorComponent::discover()
 {
     if (globalMqttClient->publish(this->discoveryTopic.c_str(), this->discoveryInfo) == true)
     {
+        this->setValueStr();
         this->sendValue();
         isDiscovered = true;
     }
@@ -32,8 +33,6 @@ void SensorComponent::handleMqttConnected()
 
 void SensorComponent::sendValue()
 {
-    Serial.print("Send Value: ");
-    Serial.println(this->value);
     globalMqttClient->publish(this->stateTopic.c_str(), this->valueStr);
 }
 
@@ -50,10 +49,8 @@ void SensorComponent::newRawValue(double rawValue)
     this->sum += rawValue;
 
     this->value = calculateAverage();
-    this->valueStr[0] = '\0';
-    this->rawValueStr[0] = '\0';
-    dtostrf(this->value, 4, this->getAccuracyDecimals(), &this->valueStr[strlen(this->valueStr)]);
-    dtostrf(this->rawValue, 4, this->getAccuracyDecimals(), &this->rawValueStr[strlen(this->rawValueStr)]);
+    this->setRawValueStr();
+    this->setValueStr();
 }
 
 double SensorComponent::calculateAverage()
@@ -69,7 +66,7 @@ double SensorComponent::calculateAverage()
 void SensorComponent::setDiscoveryInfo()
 {
     this->discoveryInfo["platform"] = "mqtt";
-    this->discoveryInfo["name"] = this->friendlyName;
+    this->discoveryInfo["name"] = this->getName();
     this->discoveryInfo["unique_id"] = this->fullId;
     this->discoveryInfo["state_topic"] = this->stateTopic;
     this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
@@ -86,6 +83,18 @@ void SensorComponent::setDiscoveryInfo()
     {
         this->discoveryInfo["unit_of_measurement"] = this->getUnitOfMeassurement();
     }
+}
+
+void SensorComponent::setValueStr()
+{
+    this->valueStr[0] = '\0';
+    dtostrf(this->value, 4, this->getAccuracyDecimals(), &this->valueStr[strlen(this->valueStr)]);
+}
+
+void SensorComponent::setRawValueStr()
+{
+    this->rawValueStr[0] = '\0';
+    dtostrf(this->rawValue, 4, this->getAccuracyDecimals(), &this->rawValueStr[strlen(this->rawValueStr)]);
 }
 
 void SensorComponent::setUpdateInterval(unsigned int updateInterval)
@@ -111,4 +120,9 @@ void SensorComponent::setIcon(String icon)
 void SensorComponent::setUnitOfMeassurement(String unitOfMeassurement)
 {
     this->unitOfMeassurement = unitOfMeassurement;
+}
+
+void SensorComponent::setValuesSendCount(unsigned int valuesSendCount)
+{
+    this->valuesSendCount = valuesSendCount;
 }

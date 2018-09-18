@@ -3,19 +3,15 @@
 
 #include <SPI.h>
 #include "max6675.h"
-#include "arduinohomelib/component.h"
-#include "arduinohomelib/log_component.h"
-#include "arduinohomelib/mqtt/mqtt_client.h"
+#include "arduinohomelib/sensor/sensor_component.h"
 
-class Max6675Sensor : public Component
+class Max6675Sensor : public SensorComponent
 {
     public:
-        Max6675Sensor(int so, int cs, int clk);
+        Max6675Sensor(String name, int so, int cs, int clk);
         void setup() override;
 
         void update();
-
-         void handleInterval() override;
 
     protected:
         int soPin;

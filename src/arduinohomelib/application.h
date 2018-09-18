@@ -7,6 +7,7 @@
 #include <unwind-cxx.h>
 #include <utility.h>
 #include <vector>
+#include "arduinohomelib/helpers.h"
 #include "arduinohomelib/component.h"
 #include "arduinohomelib/log_component.h"
 #include "arduinohomelib/settings.h"
@@ -47,15 +48,19 @@ class Application
         void loop();
         void handleMqttMessage(char* topic, byte* payload, unsigned int length);
 
-        Hcsr501BinarySensor* makeHcsr501BinarySensor(int pin);
+        // Binary_sensor
+        Hcsr501BinarySensor* makeHcsr501BinarySensor(String name, int pin);
 
-        MomentaryButton* makeMomentaryButton(int pin);
-        MomentaryButton* makeMomentaryButton(int pin, int relaisPin);
+        // Button
+        MomentaryButton* makeMomentaryButton(String name, int pin);
+        MomentaryButton* makeMomentaryButton(String name, int pin, int relaisPin);
 
-        Max6675Sensor* makeMax6675Sensor(int so, int cs, int clk);
-        Temt6000Sensor* makeTemt6000Sensor(int pin);
+        // Sensor
+        Max6675Sensor* makeMax6675Sensor(String name, int so, int cs, int clk);
+        Temt6000Sensor* makeTemt6000Sensor(String name, int pin);
 
-        Switch* makeSwitch(int pin);
+        // Switch
+        Switch* makeSwitch(String name, int pin);
 };
 
 extern Application App;

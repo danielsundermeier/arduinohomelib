@@ -112,43 +112,43 @@ UdpComponent* Application::initUdp(void (*callback)(char*), IPAddress receiverIp
     return this->udp;
 }
 
-Hcsr501BinarySensor* Application::makeHcsr501BinarySensor(int pin)
+Hcsr501BinarySensor* Application::makeHcsr501BinarySensor(String name, int pin)
 {
     return this->registerComponent(
-        new Hcsr501BinarySensor(pin)
+        new Hcsr501BinarySensor(name, pin)
     );
 }
 
-MomentaryButton* Application::makeMomentaryButton(int pin)
+MomentaryButton* Application::makeMomentaryButton(String name, int pin)
 {
     return this->registerComponent(
-        new MomentaryButton(pin)
+        new MomentaryButton(name, pin)
     );
 }
 
-MomentaryButton* Application::makeMomentaryButton(int pin, int relaisPin)
+MomentaryButton* Application::makeMomentaryButton(String name, int pin, int relaisPin)
 {
-    return this->registerComponent(new MomentaryButton(pin, relaisPin));
+    return this->registerComponent(new MomentaryButton(name, pin, relaisPin));
 }
 
-Max6675Sensor* Application::makeMax6675Sensor(int so, int cs, int clk)
+Max6675Sensor* Application::makeMax6675Sensor(String name, int so, int cs, int clk)
 {
     return this->registerComponent(
-        new Max6675Sensor(so, cs, clk)
+        new Max6675Sensor(name, so, cs, clk)
     );
 }
 
-Temt6000Sensor* Application::makeTemt6000Sensor(int pin)
+Temt6000Sensor* Application::makeTemt6000Sensor(String name, int pin)
 {
     return this->registerComponent(
-        new Temt6000Sensor(pin)
+        new Temt6000Sensor(name, pin)
     );
 }
 
-Switch* Application::makeSwitch(int pin)
+Switch* Application::makeSwitch(String name, int pin)
 {
     return this->registerComponent(
-        new Switch(pin)
+        new Switch(name, pin)
     );
 }
 

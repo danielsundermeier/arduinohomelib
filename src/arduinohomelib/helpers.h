@@ -3,4 +3,6 @@
 
 #include <Arduino.h>
 
+String toKebabCase(String text);
+
 #endif

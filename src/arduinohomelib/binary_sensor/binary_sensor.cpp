@@ -1,6 +1,6 @@
 #include "arduinohomelib/binary_sensor/hcsr501_component.h"
 
-BinarySensor::BinarySensor(int pin)
+BinarySensor::BinarySensor(String name, int pin) : Nameable(name)
 {
     this->pin = pin;
 }
@@ -80,7 +80,7 @@ void BinarySensor::setDiscoveryInfo()
 {
     this->discoveryInfo["platform"] = "mqtt";
     this->discoveryInfo["device_class"] = this->getDeviceClass();
-    this->discoveryInfo["name"] = this->friendlyName;
+    this->discoveryInfo["name"] = this->getName();
     this->discoveryInfo["unique_id"] = this->fullId;
     this->discoveryInfo["state_topic"] = this->stateTopic;
     this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";

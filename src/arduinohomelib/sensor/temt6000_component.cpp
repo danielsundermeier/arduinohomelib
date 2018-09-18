@@ -1,6 +1,6 @@
 #include "arduinohomelib/sensor/temt6000_component.h"
 
-Temt6000Sensor::Temt6000Sensor(int pin)
+Temt6000Sensor::Temt6000Sensor(String name, int pin) : SensorComponent(name)
 {
     this->pin = pin;
 }
@@ -11,8 +11,7 @@ void Temt6000Sensor::setup()
 
     this->setInterval("", this->getUpdateInterval(), this);
 
-    this->friendlyName = "Helligkeit";
-    this->id = "brightness_" + String(this->pin);
+    this->friendlyName = this->getName();
     this->fullId = String(Settings::name) + "_" + this->id;
 
     this->stateTopic = String(Settings::name) + "/" + String(this->pin) + "/state";
@@ -24,11 +23,12 @@ void Temt6000Sensor::setup()
 void Temt6000Sensor::update()
 {
     this->newRawValue((analogRead(pin) / 10000.0) * 2000000.0);
+    Logger->debug("sensor.temt6000", "New Value: %s", this->rawValueStr);
 
     if (this->valuesCount >= this->valuesSendCount)
     {
+        Logger->debug("sensor.temt6000", "Send Value: %s", this->valueStr);
         this->sendValue();
         this->valuesCount = 0;
     }
-    Logger->debug("sensor.temt6000", "New Value: %s", this->rawValueStr);
 }

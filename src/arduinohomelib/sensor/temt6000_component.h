@@ -6,7 +6,7 @@
 class Temt6000Sensor : public SensorComponent
 {
     public:
-        Temt6000Sensor(int pin);
+        Temt6000Sensor(String name, int pin);
 
         void setup() override;
 

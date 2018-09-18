@@ -1,8 +1,8 @@
 #include "arduinohomelib/switch/switch_component.h"
 
-Switch::Switch() {}
+Switch::Switch(String name) : Nameable(name) {}
 
-Switch::Switch(int pin)
+Switch::Switch(String name, int pin) : Nameable(name)
 {
     setPin(pin);
 }
@@ -80,7 +80,7 @@ void Switch::handleMqttMessage(String cmd)
 void Switch::setDiscoveryInfo()
 {
     this->discoveryInfo["platform"] = "mqtt";
-    this->discoveryInfo["name"] = this->friendlyName;
+    this->discoveryInfo["name"] = this->getName();
     this->discoveryInfo["state_topic"] = this->stateTopic;
     this->discoveryInfo["command_topic"] = this->commandTopic;
     this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
