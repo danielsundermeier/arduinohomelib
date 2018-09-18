@@ -21,14 +21,16 @@ void BinarySensor::setup()
 
 void BinarySensor::loop()
 {
-    state = digitalRead(this->pin);
+    this->state = digitalRead(this->pin);
     if (this->toHigh())
     {
+        this->stateCallback.call(this->state);
         this->sendState();
         Logger->debug("binary_sensor.hcsr501", "Bewegung erkannt");
     }
     if (this->toLow())
     {
+        this->stateCallback.call(this->state);
         this->sendState();
         Logger->debug("binary_sensor.hcsr501", "Keine Bewegung erkannt");
     }
@@ -69,7 +71,6 @@ void BinarySensor::discover()
 void BinarySensor::sendState()
 {
     globalMqttClient->publish(this->stateTopic.c_str(), (this->state ? "ON" : "OFF"));
-    this->callOnNewStateCallback(this->state);
 }
 
 const char* BinarySensor::getDeviceClass() const
@@ -87,16 +88,8 @@ void BinarySensor::setDiscoveryInfo()
     this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
 }
 
-void BinarySensor::addOnNewStateCallback(void (*function)(bool state))
+void BinarySensor::addStateCallback(void (*function)(bool state))
 {
-    this->onNewStateCallbacks.push_back(function);
-}
-
-void BinarySensor::callOnNewStateCallback(bool state)
-{
-    for (uint32_t i = 0; i < this->onNewStateCallbacks.size(); i++)
-    {
-        this->onNewStateCallbacks[i](state);
-    }
+    this->stateCallback.add(function);
 }
 

@@ -21,13 +21,12 @@ class BinarySensor : public Component, public Nameable
         void handleMqttConnected();
         void sendState();
 
-        void addOnNewStateCallback(void (*function)(bool state));
-        void callOnNewStateCallback(bool state);
+        void addStateCallback(void (*function)(bool state));
 
     protected:
         const char* device = "binary_sensor";
 
-        std::vector<void (*)(bool)> onNewStateCallbacks;
+        CallbackManager<void(bool)> stateCallback{};
 
         int pin;
 

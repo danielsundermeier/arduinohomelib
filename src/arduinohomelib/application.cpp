@@ -64,7 +64,8 @@ void Application::handleMqttMessage(char* topic, byte* payload, unsigned int len
         cmd += (char)payload[i];
     }
     Logger->debug("mqtt", "Received\t[%s]\t%s", topic, cmd.c_str());
-    for (uint32_t i = 0; i < componentsCount; i++) {
+    for (uint32_t i = 0; i < componentsCount; i++)
+    {
         if (strcmp(topic, App.components[i]->getCommandTopic().c_str()) == 0)
         {
             this->components[i]->handleMqttMessage(cmd);
