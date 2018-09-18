@@ -69,6 +69,7 @@ void BinarySensor::discover()
 void BinarySensor::sendState()
 {
     globalMqttClient->publish(this->stateTopic.c_str(), (this->state ? "ON" : "OFF"));
+    this->callOnNewStateCallback(this->state);
 }
 
 const char* BinarySensor::getDeviceClass() const
@@ -84,5 +85,18 @@ void BinarySensor::setDiscoveryInfo()
     this->discoveryInfo["unique_id"] = this->fullId;
     this->discoveryInfo["state_topic"] = this->stateTopic;
     this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
+}
+
+void BinarySensor::addOnNewStateCallback(void (*function)(bool state))
+{
+    this->onNewStateCallbacks.push_back(function);
+}
+
+void BinarySensor::callOnNewStateCallback(bool state)
+{
+    for (uint32_t i = 0; i < this->onNewStateCallbacks.size(); i++)
+    {
+        this->onNewStateCallbacks[i](state);
+    }
 }
 
