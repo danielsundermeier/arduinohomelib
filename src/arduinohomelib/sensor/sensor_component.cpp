@@ -7,6 +7,7 @@ void SensorComponent::update() {}
 void SensorComponent::handleInterval()
 {
     this->update();
+    Component::handleInterval();
 }
 
 void SensorComponent::discover()

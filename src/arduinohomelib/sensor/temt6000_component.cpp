@@ -9,7 +9,7 @@ void Temt6000Sensor::setup()
 {
     pinMode(pin, INPUT);
 
-    this->setInterval("", this->getUpdateInterval(), this);
+    this->setInterval(this->getUpdateInterval());
 
     this->friendlyName = this->getName();
     this->fullId = String(Settings::name) + "_" + this->id;

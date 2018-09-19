@@ -32,11 +32,14 @@ class Component
         virtual void handleMqttMessage(String cmd);
 
         bool cancelInterval(const std::string &name);
-        void setInterval(const std::string &name, uint32_t interval, Component *c);
+        void setInterval(uint32_t interval, const std::string &name = "");
         virtual void handleInterval();
-        //bool cancelTimeout(const std::string &name);
-        //void setTimeout(const std::string &name, uint32_t timeout, void (*f)());
+        bool cancelTimeout(const std::string &name);
+        void setTimeout(uint32_t timeout, const std::string &name = "");
         virtual void handleTimeout();
+
+        void addIntervalCallback(void (*function)());
+        void addTimeoutCallback(void (*function)());
 
     protected:
         String friendlyName;
@@ -49,6 +52,9 @@ class Component
 
         StaticJsonBuffer<ARDOINOHOMELIB_JSON_BUFFER_SIZE> JSONbuffer;
         JsonObject& discoveryInfo = JSONbuffer.createObject();
+
+        CallbackManager<void()> intervalCallbacks{};
+        CallbackManager<void()> timeoutCallbacks{};
 
         void loopInternal();
 

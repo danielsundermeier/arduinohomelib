@@ -11,7 +11,7 @@ void Max6675Sensor::setup()
 {
     thermocouple.begin(this->clkPin, this->csPin, this->soPin);
 
-    this->setInterval("", 2000, this);
+    this->setInterval(this->getUpdateInterval());
 
     this->friendlyName = this->getName();
     this->fullId = String(Settings::name) + "_" + this->id;

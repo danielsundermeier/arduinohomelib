@@ -72,7 +72,7 @@ bool Component::cancelInterval(const std::string &name)
     return this->cancelTimeFunction(name, TimeFunction::INTERVAL);
 }
 
-void Component::setInterval(const std::string &name, uint32_t interval, Component *c)
+void Component::setInterval(uint32_t interval, const std::string &name)
 {
     int offset = 0;
     if (interval != 0)
@@ -80,32 +80,32 @@ void Component::setInterval(const std::string &name, uint32_t interval, Componen
         offset = (random(65535) % interval) / 2;
     }
     this->cancelInterval(name);
-    struct TimeFunction function { name, TimeFunction::INTERVAL, interval, millis() - interval - offset, c, false };
+    struct TimeFunction function { name, TimeFunction::INTERVAL, interval, millis() - interval - offset, this, false };
     this->timeFunctions.push_back(function);
 }
 
 void Component::handleInterval()
 {
-    Serial.println("Interval Default");
+    this->intervalCallbacks.call();
 }
 
 void Component::handleTimeout()
 {
-    Serial.println("Timeout Default");
+    this->timeoutCallbacks.call();
 }
-/*
+
 bool Component::cancelTimeout(const std::string &name)
 {
     return this->cancelTimeFunction(name, TimeFunction::TIMEOUT);
 }
 
-void Component::setTimeout(const std::string &name, uint32_t timeout, void (*f)())
+void Component::setTimeout(uint32_t timeout, const std::string &name)
 {
     this->cancelTimeout(name);
-    struct TimeFunction function { name, TimeFunction::TIMEOUT, timeout, millis(), f, false };
+    struct TimeFunction function { name, TimeFunction::TIMEOUT, timeout, millis(), this, false };
     this->timeFunctions.push_back(function);
 }
-*/
+
 void Component::loopInternal()
 {
     for (unsigned int i = 0; i < this->timeFunctions.size(); i++)
@@ -158,6 +158,16 @@ bool Component::TimeFunction::shouldRun(uint32_t now) const
     }
 
     return this->interval != 4294967295UL && now - this->last_execution > this->interval;
+}
+
+void Component::addIntervalCallback(void (*function)())
+{
+    this->intervalCallbacks.add(function);
+}
+
+void Component::addTimeoutCallback(void (*function)())
+{
+    this->timeoutCallbacks.add(function);
 }
 
 Nameable::Nameable(String name)
