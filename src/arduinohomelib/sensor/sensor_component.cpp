@@ -20,7 +20,7 @@ void SensorComponent::discover()
     }
     else
     {
-        Logger->debug("sensor", "Error sending discovery");
+        Logger->debug("sensor", "Error sending discovery for %s", this->discoveryTopic.c_str());
     }
 }
 
@@ -30,6 +30,16 @@ void SensorComponent::handleMqttConnected()
     {
         discover();
     }
+}
+
+bool SensorComponent::shouldSendValue()
+{
+    return (this->valuesCount >= this->valuesSendCount);
+}
+
+void SensorComponent::resetValuesCount()
+{
+    this->valuesCount = 0;
 }
 
 void SensorComponent::sendValue()
@@ -126,4 +136,28 @@ void SensorComponent::setUnitOfMeassurement(String unitOfMeassurement)
 void SensorComponent::setValuesSendCount(unsigned int valuesSendCount)
 {
     this->valuesSendCount = valuesSendCount;
+}
+
+
+EmptySensorComponent::EmptySensorComponent(String name, short unsigned int accuracyDecimals, String icon, String unitOfMeassurement) : SensorComponent(name)
+{
+    this->accuracyDecimals = accuracyDecimals;
+    this->icon = icon;
+    this->unitOfMeassurement = unitOfMeassurement;
+}
+
+void EmptySensorComponent::setup()
+{
+    this->friendlyName = this->getName();
+    this->fullId = String(Settings::name) + "_" + this->id;
+
+    this->stateTopic = String(Settings::name) + "/" + String(this->id) + "/state";
+    this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->id + "/config";
+
+    setDiscoveryInfo();
+}
+
+void EmptySensorComponent::setNewRawValue(double rawValue)
+{
+    this->newRawValue(rawValue);
 }

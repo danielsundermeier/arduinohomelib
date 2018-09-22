@@ -3,6 +3,8 @@
 Temt6000Sensor::Temt6000Sensor(String name, int pin) : SensorComponent(name)
 {
     this->pin = pin;
+
+    this->unitOfMeassurement = "lux";
 }
 
 void Temt6000Sensor::setup()
@@ -23,11 +25,11 @@ void Temt6000Sensor::setup()
 void Temt6000Sensor::update()
 {
     this->newRawValue((analogRead(pin) / 10000.0) * 2000000.0);
-    Logger->debug("sensor.temt6000", "New Value: %s", this->rawValueStr);
+    Logger->debug("sensor.temt6000", "New Value: %s%s", this->rawValueStr, this->getUnitOfMeassurement().c_str());
 
-    if (this->valuesCount >= this->valuesSendCount)
+    if (this->shouldSendValue())
     {
-        Logger->debug("sensor.temt6000", "Send Value: %s", this->valueStr);
+        Logger->debug("sensor.temt6000", "Send Value: %s%s", this->valueStr, this->getUnitOfMeassurement().c_str());
         this->sendValue();
         this->valuesCount = 0;
     }

@@ -5,6 +5,8 @@ Max6675Sensor::Max6675Sensor(String name, int so, int cs, int clk) : SensorCompo
     this->soPin = soPin;
     this->csPin = csPin;
     this->clkPin = clkPin;
+
+    this->unitOfMeassurement = "°C";
 }
 
 void Max6675Sensor::setup()
@@ -25,11 +27,11 @@ void Max6675Sensor::setup()
 void Max6675Sensor::update()
 {
     this->newRawValue(this->thermocouple.readCelsius());
-    if (this->valuesCount >= this->valuesSendCount)
+    if (this->shouldSendValue())
     {
-        Logger->debug("sensor.max6675", "Send Value: %s", this->valueStr);
+        Logger->debug("sensor.max6675", "Send Value: %s%s", this->valueStr, this->getUnitOfMeassurement().c_str());
         this->sendValue();
         this->valuesCount = 0;
     }
-    Logger->debug("sensor.max6675", "New Value: %s", this->rawValueStr);
+    Logger->debug("sensor.max6675", "New Value: %s%s", this->rawValueStr, this->getUnitOfMeassurement().c_str());
 }

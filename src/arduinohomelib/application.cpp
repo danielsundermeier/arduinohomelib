@@ -132,6 +132,20 @@ MomentaryButton* Application::makeMomentaryButton(String name, int pin, int rela
     return this->registerComponent(new MomentaryButton(name, pin, relaisPin));
 }
 
+FastledLight* Application::makeFastledLight(String name, int pin, unsigned short int numLeds, CRGB* leds)
+{
+    return this->registerComponent(
+        new FastledLight(name, pin, numLeds, leds)
+    );
+}
+
+Dht22Sensor* Application::makeDht22Sensor(String nameTemperature, String nameHumidity, int pin)
+{
+    return this->registerComponent(
+        new Dht22Sensor(nameTemperature, nameHumidity, pin)
+    );
+}
+
 Max6675Sensor* Application::makeMax6675Sensor(String name, int so, int cs, int clk)
 {
     return this->registerComponent(

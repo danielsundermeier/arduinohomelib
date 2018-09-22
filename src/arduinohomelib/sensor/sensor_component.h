@@ -16,20 +16,20 @@ class SensorComponent : public Component, public Nameable
 
         void handleInterval() override;
 
-        void discover();
+        virtual void discover();
         void handleMqttConnected();
         virtual void sendValue();
 
-        // TODO
-        // bool shouldSend() ?
+        bool shouldSendValue();
+        void resetValuesCount();
 
-        void setUpdateInterval(unsigned int updateInterval);
         void setDeviceClass(String deviceClass);
         void setIcon(String icon);
         void setUnitOfMeassurement(String unitOfMeassurement);
         void setAccuracyDecimals(short unsigned int accuracyDecimals);
 
-        void setValuesSendCount(unsigned int valuesSendCount);
+        virtual void setUpdateInterval(unsigned int updateInterval);
+        virtual void setValuesSendCount(unsigned int valuesSendCount);
 
     protected:
         int pin;
@@ -68,8 +68,24 @@ class SensorComponent : public Component, public Nameable
         virtual String getIcon() const { return this->icon; }
         virtual String getUnitOfMeassurement() const { return this->unitOfMeassurement; }
 
-
         void setDiscoveryInfo();
+};
+
+class EmptySensorComponent : public SensorComponent
+{
+    public:
+        explicit EmptySensorComponent(String name, short unsigned int accuracyDecimals, String icon, String unitOfMeassurement);
+
+        void setup();
+
+        void setNewRawValue(double rawValue);
+
+        short unsigned int getAccuracyDecimals() const override { return this->accuracyDecimals; }
+        String getIcon() const override { return this->icon; }
+        String getUnitOfMeassurement() const override { return this->unitOfMeassurement; }
+
+        String getRawValueStr() const { return this->rawValueStr; }
+        String getValueStr() const { return this->valueStr; }
 };
 
 #endif

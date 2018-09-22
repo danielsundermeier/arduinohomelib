@@ -17,6 +17,8 @@
 
 #include "arduinohomelib/binary_sensor/hcsr501_component.h"
 #include "arduinohomelib/button/momentary_button_component.h"
+#include "arduinohomelib/light/fastled_component.h"
+#include "arduinohomelib/sensor/dht22_component.h"
 #include "arduinohomelib/sensor/max6675_component.h"
 #include "arduinohomelib/sensor/temt6000_component.h"
 #include "arduinohomelib/switch/switch_component.h"
@@ -55,7 +57,11 @@ class Application
         MomentaryButton* makeMomentaryButton(String name, int pin);
         MomentaryButton* makeMomentaryButton(String name, int pin, int relaisPin);
 
+        // Light
+        FastledLight* makeFastledLight(String name, int pin, unsigned short int numLeds, CRGB* leds);
+
         // Sensor
+        Dht22Sensor* makeDht22Sensor(String nameTemperature, String nameHumidity, int pin);
         Max6675Sensor* makeMax6675Sensor(String name, int so, int cs, int clk);
         Temt6000Sensor* makeTemt6000Sensor(String name, int pin);
 
