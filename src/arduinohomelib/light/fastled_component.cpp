@@ -20,9 +20,10 @@ void FastledLight::setup()
 
 void FastledLight::on()
 {
-    setColor(255, 0, 0);
+    setColor(0, 255, 0);
     FastLED.show();
     Logger->debug("light.fastled", "Schalte ON");
+    this->state = true;
 }
 
 void FastledLight::off()
@@ -30,6 +31,19 @@ void FastledLight::off()
     setColor(0, 0, 0);
     FastLED.show();
     Logger->debug("light.fastled", "Schalte OFF");
+    this->state = false;
+}
+
+void FastledLight::toggle()
+{
+    if (this->state)
+    {
+        this->off();
+    }
+    else
+    {
+        this->on();
+    }
 }
 
 void FastledLight::setColor(int red, int green, int blue)

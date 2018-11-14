@@ -26,6 +26,7 @@ void Dht22Sensor::update()
 
 void Dht22Sensor::updateTemperature()
 {
+    Serial.println(this->temperatureSensor->getName());
     this->temperatureSensor->setNewRawValue(this->dht.getTemperature());
     if (this->temperatureSensor->shouldSendValue())
     {
@@ -38,6 +39,7 @@ void Dht22Sensor::updateTemperature()
 
 void Dht22Sensor::updateHumidity()
 {
+    Serial.println(this->humiditySensor->getName());
     this->humiditySensor->setNewRawValue(this->dht.getHumidity());
     if (this->humiditySensor->shouldSendValue())
     {

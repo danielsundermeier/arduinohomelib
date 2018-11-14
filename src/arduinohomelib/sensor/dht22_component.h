@@ -27,6 +27,8 @@ class Dht22Sensor : public SensorComponent
 
         void updateTemperature();
         void updateHumidity();
+
+        unsigned int getUpdateInterval() const override { return this->updateInterval; }
 };
 
 #endif

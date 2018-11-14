@@ -17,12 +17,14 @@ class FastledLight : public Component, public Nameable
 
         void on();
         void off();
+        void toggle();
 
         void setColor(int red, int green, int blue);
         void setColorLed(unsigned short int i, int red, int green, int blue);
 
     protected:
 
+        bool state = false;
         uint8_t pin;
 };
 

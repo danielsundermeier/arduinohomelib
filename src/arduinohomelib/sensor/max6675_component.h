@@ -8,7 +8,7 @@
 class Max6675Sensor : public SensorComponent
 {
     public:
-        Max6675Sensor(String name, int so, int cs, int clk);
+        Max6675Sensor(String name, int soPin, int csPin, int clkPin);
 
         void setup() override;
 

@@ -38,6 +38,9 @@ class Application
         LogComponent* initLog();
         EthernetComponent* ethernet{nullptr};
         EthernetComponent* initEthernet(byte* mac);
+        MqttClient* initMqtt(String serverId, String username, String password);
+        MqttClient* initMqtt(String serverId, String username, String password, void (*connectedCallback)());
+        MqttClient* initMqtt(String serverId, String username, String password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length));
         MqttClient* initMqtt(String serverId, String username, String password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)());
         MqttClient* mqtt{nullptr};
         UdpComponent* udp{nullptr};
@@ -81,5 +84,8 @@ C* Application::registerComponent(C* c) {
 
     return c;
 }
+
+void defaultMqttMessageReceived(char* topic, byte* payload, unsigned int length);
+void defaultMqttConnected();
 
 #endif

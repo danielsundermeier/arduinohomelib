@@ -130,7 +130,8 @@ void Component::loopInternal()
                 const uint32_t amount = (now - tf->last_execution) / tf->interval;
                 tf->last_execution += (amount * tf->interval);
             }
-            else if (tf->type == TimeFunction::DEFER || tf->type == TimeFunction::TIMEOUT) {
+            else if (tf->type == TimeFunction::DEFER || tf->type == TimeFunction::TIMEOUT)
+            {
                 tf->remove = true;
             }
         }

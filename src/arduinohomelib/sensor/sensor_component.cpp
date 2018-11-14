@@ -34,7 +34,7 @@ void SensorComponent::handleMqttConnected()
 
 bool SensorComponent::shouldSendValue()
 {
-    return (this->valuesCount >= this->valuesSendCount);
+    return (globalMqttClient != nullptr && this->valuesCount >= this->valuesSendCount);
 }
 
 void SensorComponent::resetValuesCount()
@@ -81,7 +81,7 @@ void SensorComponent::setDiscoveryInfo()
     this->discoveryInfo["unique_id"] = this->fullId;
     this->discoveryInfo["state_topic"] = this->stateTopic;
     this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
-    this->discoveryInfo["expire_after"] = this->getUpdateInterval() * this->valuesSendCount / 1000;
+    this->discoveryInfo["expire_after"] = (this->getUpdateInterval() + 2) * (this->valuesSendCount / 1000);
     if (this->getDeviceClass() != "")
     {
         this->discoveryInfo["device_class"] = this->getDeviceClass();
@@ -148,13 +148,30 @@ EmptySensorComponent::EmptySensorComponent(String name, short unsigned int accur
 
 void EmptySensorComponent::setup()
 {
-    this->friendlyName = this->getName();
-    this->fullId = String(Settings::name) + "_" + this->id;
+    Serial.print("freeMemory=");
+    Serial.println(freeMemory());
 
-    this->stateTopic = String(Settings::name) + "/" + String(this->id) + "/state";
-    this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->id + "/config";
+    this->friendlyName = this->getName();
+    Logger->debug("EmptySensor", "Name\t%s", this->friendlyName.c_str());
+    Logger->debug("EmptySensor", "ID\t%s", this->getId().c_str());
+    delay(1000);
+
+    this->fullId = String(Settings::name) + "_" + this->getId();
+    Logger->debug("EmptySensor", "Full ID\t%s", this->fullId.c_str());
+    delay(2000);
+
+    this->stateTopic = String(Settings::name) + "/" + this->getId() + "/state";
+    Logger->debug("EmptySensor", "State Topic\t%s", this->stateTopic.c_str());
+    delay(1000);
+
+    this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->getId() + "/config";
+    Logger->debug("EmptySensor", "Discovery Topic\t%s", this->discoveryTopic.c_str());
+    delay(1000);
 
     setDiscoveryInfo();
+
+    Serial.print("freeMemory=");
+    Serial.println(freeMemory());
 }
 
 void EmptySensorComponent::setNewRawValue(double rawValue)

@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <queue>
+#include <MemoryFree.h>
 #include "arduinohomelib/component.h"
 #include "arduinohomelib/log_component.h"
 #include "arduinohomelib/mqtt/mqtt_client.h"

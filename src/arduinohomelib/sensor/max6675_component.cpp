@@ -1,6 +1,6 @@
 #include "arduinohomelib/sensor/max6675_component.h"
 
-Max6675Sensor::Max6675Sensor(String name, int so, int cs, int clk) : SensorComponent(name)
+Max6675Sensor::Max6675Sensor(String name, int soPin, int csPin, int clkPin) : SensorComponent(name)
 {
     this->soPin = soPin;
     this->csPin = csPin;
@@ -11,14 +11,15 @@ Max6675Sensor::Max6675Sensor(String name, int so, int cs, int clk) : SensorCompo
 
 void Max6675Sensor::setup()
 {
-    thermocouple.begin(this->clkPin, this->csPin, this->soPin);
+    this->thermocouple.begin(this->clkPin, this->csPin, this->soPin);
+    delay(500);
 
     this->setInterval(this->getUpdateInterval());
 
     this->friendlyName = this->getName();
     this->fullId = String(Settings::name) + "_" + this->id;
 
-    this->stateTopic = String(Settings::name) + "/" + String(this->pin) + "/state";
+    this->stateTopic = String(Settings::name) + "/" + String(this->clkPin) + "/state";
     this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->id + "/config";
 
     setDiscoveryInfo();

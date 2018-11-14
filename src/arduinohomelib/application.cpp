@@ -105,6 +105,21 @@ MqttClient* Application::initMqtt(String serverId, String username, String passw
     return this->mqtt;
 }
 
+MqttClient* Application::initMqtt(String serverId, String username, String password)
+{
+    return this->initMqtt(serverId, username, password, defaultMqttMessageReceived, defaultMqttConnected);
+}
+
+MqttClient* Application::initMqtt(String serverId, String username, String password, void (*connectedCallback)())
+{
+    return this->initMqtt(serverId, username, password, defaultMqttMessageReceived, connectedCallback);
+}
+
+MqttClient* Application::initMqtt(String serverId, String username, String password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length))
+{
+    return this->initMqtt(serverId, username, password, messageReceivedCallback, defaultMqttConnected);
+}
+
 UdpComponent* Application::initUdp(void (*callback)(char*), IPAddress receiverIp)
 {
     auto* udp = new UdpComponent(callback, receiverIp);
@@ -168,3 +183,15 @@ Switch* Application::makeSwitch(String name, int pin)
 }
 
 Application App;
+
+void defaultMqttMessageReceived(char* topic, byte* payload, unsigned int length)
+{
+    App.handleMqttMessage(topic, payload, length);
+}
+
+void defaultMqttConnected()
+{
+    for (uint32_t i = 0; i < App.getComponentsCount(); i++) {
+        App.components[i]->handleMqttConnected();
+    }
+}
