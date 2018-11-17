@@ -161,6 +161,21 @@ Dht22Sensor* Application::makeDht22Sensor(String nameTemperature, String nameHum
     );
 }
 
+Max31856Sensor* Application::makeMax31856Sensor(String name, int csPin)
+{
+    return this->registerComponent(
+        new Max31856Sensor(name, csPin)
+    );
+}
+
+Max31856Sensor* Application::makeMax31856Sensor(String name, int csPin, int diPin, int doPin, int clkPin)
+{
+    return this->registerComponent(
+        new Max31856Sensor(name, csPin, diPin, doPin, clkPin)
+    );
+}
+
+
 Max6675Sensor* Application::makeMax6675Sensor(String name, int so, int cs, int clk)
 {
     return this->registerComponent(
