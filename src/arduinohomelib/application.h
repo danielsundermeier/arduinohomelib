@@ -53,6 +53,7 @@ class Application
         void setup();
         void loop();
         void handleMqttMessage(char* topic, byte* payload, unsigned int length);
+        void handleMqttMessageHomeAssistantStatus(String cmd);
 
         // Binary_sensor
         Hcsr501BinarySensor* makeHcsr501BinarySensor(String name, int pin);

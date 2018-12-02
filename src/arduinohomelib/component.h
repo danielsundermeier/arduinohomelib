@@ -26,6 +26,8 @@ class Component
         virtual void setup();
         virtual void loop();
 
+        void undiscovered();
+        virtual void discover();
         virtual void subscribe();
         virtual String getCommandTopic();
         virtual void handleMqttConnected();

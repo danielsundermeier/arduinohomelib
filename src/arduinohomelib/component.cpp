@@ -24,6 +24,16 @@ void Component::loop()
 
 }
 
+void Component::undiscovered()
+{
+    this->isDiscovered = false;
+}
+
+void Component::discover()
+{
+
+}
+
 void Component::subscribe()
 {
 

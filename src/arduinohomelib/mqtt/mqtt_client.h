@@ -28,6 +28,8 @@ class MqttClient
         bool subscribe(const char* topic);
         bool log(const char* payload);
 
+        void available();
+
         void setConnectedCallback(void (*connectedCallback)());
         void setMessageReceivedCallback(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length));
     private:
@@ -37,7 +39,6 @@ class MqttClient
         void (*_connectedCallback)();
         String _statusTopic;
         String _debugTopic;
-        void available();
         void unavailable();
 };
 

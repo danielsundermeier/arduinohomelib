@@ -17,7 +17,7 @@ class SensorComponent : public Component, public Nameable
 
         void handleInterval() override;
 
-        virtual void discover();
+        void discover() override;
         void handleMqttConnected();
         virtual void sendValue();
 

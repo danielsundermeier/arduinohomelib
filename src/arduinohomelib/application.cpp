@@ -56,6 +56,23 @@ void Application::loop()
     }
 }
 
+void Application::handleMqttMessageHomeAssistantStatus(String cmd)
+{
+    if (strcmp(cmd.c_str(), "online") == 0)
+    {
+        globalMqttClient->available();
+        for (uint32_t i = 0; i < App.getComponentsCount(); i++) {
+            App.components[i]->discover();
+        }
+    }
+    else if (strcmp(cmd.c_str(), "offline") == 0)
+    {
+        for (uint32_t i = 0; i < App.getComponentsCount(); i++) {
+            App.components[i]->undiscovered();
+        }
+    }
+}
+
 void Application::handleMqttMessage(char* topic, byte* payload, unsigned int length)
 {
     String cmd = "";
@@ -64,6 +81,13 @@ void Application::handleMqttMessage(char* topic, byte* payload, unsigned int len
         cmd += (char)payload[i];
     }
     Logger->debug("mqtt", "Received\t[%s]\t%s", topic, cmd.c_str());
+    if (strcmp(topic, "homeassistant/status") == 0)
+    {
+        this->handleMqttMessageHomeAssistantStatus(cmd);
+
+        return;
+    }
+
     for (uint32_t i = 0; i < componentsCount; i++)
     {
         if (strcmp(topic, App.components[i]->getCommandTopic().c_str()) == 0)

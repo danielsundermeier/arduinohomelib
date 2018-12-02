@@ -64,6 +64,7 @@ bool MqttClient::connect()
            _connectedCallback();
         }
         available();
+        subscribe("homeassistant/status");
     }
     else
     {
