@@ -12,7 +12,29 @@ void SensorComponent::handleInterval()
 
 void SensorComponent::discover()
 {
-    if (globalMqttClient->publish(this->discoveryTopic.c_str(), this->discoveryInfo) == true)
+    StaticJsonBuffer<ARDOINOHOMELIB_JSON_BUFFER_SIZE> JSONbuffer;
+    JsonObject& discoveryInfo = JSONbuffer.createObject();
+
+    discoveryInfo["platform"] = "mqtt";
+    discoveryInfo["name"] = this->getName();
+    discoveryInfo["unique_id"] = this->fullId;
+    discoveryInfo["state_topic"] = this->stateTopic;
+    discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
+    discoveryInfo["expire_after"] = (this->getUpdateInterval() + 2) * (this->valuesSendCount / 1000);
+    if (this->getDeviceClass() != "")
+    {
+        discoveryInfo["device_class"] = this->getDeviceClass();
+    }
+    if (this->getIcon() != "")
+    {
+        discoveryInfo["icon"] = this->getIcon();
+    }
+    if (this->getUnitOfMeassurement() != "")
+    {
+        discoveryInfo["unit_of_measurement"] = this->getUnitOfMeassurement();
+    }
+
+    if (globalMqttClient->publish(this->discoveryTopic.c_str(), discoveryInfo) == true)
     {
         this->setValueStr();
         this->sendValue();
@@ -76,24 +98,7 @@ double SensorComponent::calculateAverage()
 
 void SensorComponent::setDiscoveryInfo()
 {
-    this->discoveryInfo["platform"] = "mqtt";
-    this->discoveryInfo["name"] = this->getName();
-    this->discoveryInfo["unique_id"] = this->fullId;
-    this->discoveryInfo["state_topic"] = this->stateTopic;
-    this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
-    this->discoveryInfo["expire_after"] = (this->getUpdateInterval() + 2) * (this->valuesSendCount / 1000);
-    if (this->getDeviceClass() != "")
-    {
-        this->discoveryInfo["device_class"] = this->getDeviceClass();
-    }
-    if (this->getIcon() != "")
-    {
-        this->discoveryInfo["icon"] = this->getIcon();
-    }
-    if (this->getUnitOfMeassurement() != "")
-    {
-        this->discoveryInfo["unit_of_measurement"] = this->getUnitOfMeassurement();
-    }
+
 }
 
 void SensorComponent::setValueStr()

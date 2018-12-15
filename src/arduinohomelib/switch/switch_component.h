@@ -21,6 +21,8 @@ class Switch : public Component, public Nameable
         void handleMqttMessage(String cmd);
         void handleMqttConnected();
 
+        void handleUdpMessage(int pin, const char* cmd) override;
+
     protected:
         const char* device = "switch";
         int pin;

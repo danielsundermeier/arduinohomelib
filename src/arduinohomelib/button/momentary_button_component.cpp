@@ -19,7 +19,7 @@ void MomentaryButton::setPin(int pin)
     _bouncer.attach(pin, INPUT_PULLUP);
     _bouncer.interval(BOUNCER_INTERVAL);
     _pin = pin;
-    _topic = String(Settings::name) + "/" + String(_pin) + "/";
+    // _topic = String(Settings::name) + "/" + String(_pin) + "/";
 }
 
 void MomentaryButton::setRelaisPin(int pin)
@@ -124,7 +124,7 @@ void MomentaryButton::click()
     handleClick(EVENT_CLICK);
     if (_relaisPin > 0)
     {
-        globalUdpComponent->sendCommand(_relaisPin, "toggle");
+        globalUdpComponent->sendCommand(_relaisPin, "");
     }
 }
 
@@ -151,6 +151,5 @@ void MomentaryButton::handleClick(unsigned short int eventType)
 
 void MomentaryButton::publish(unsigned short int eventType)
 {
-    String topic = _topic + EVENT_TYPES[eventType];
-    globalMqttClient->publish(topic.c_str(), "ON");
+    globalMqttClient->publish((String(Settings::name) + "/" + String(_pin) + "/" + EVENT_TYPES[eventType]).c_str(), "ON");
 }

@@ -15,7 +15,7 @@
 #include "arduinohomelib/helpers.h"
 #include "arduinohomelib/settings.h"
 
-const int ARDOINOHOMELIB_JSON_BUFFER_SIZE = 300;
+const int ARDOINOHOMELIB_JSON_BUFFER_SIZE = 400;
 
 class Component
 {
@@ -32,6 +32,8 @@ class Component
         virtual String getCommandTopic();
         virtual void handleMqttConnected();
         virtual void handleMqttMessage(String cmd);
+
+        virtual void handleUdpMessage(int pin, const char* cmd);
 
         bool cancelInterval(const std::string &name);
         void setInterval(uint32_t interval, const std::string &name = "");
@@ -51,9 +53,6 @@ class Component
         String commandTopic;
         String stateTopic;
         String discoveryTopic;
-
-        StaticJsonBuffer<ARDOINOHOMELIB_JSON_BUFFER_SIZE> JSONbuffer;
-        JsonObject& discoveryInfo = JSONbuffer.createObject();
 
         CallbackManager<void()> intervalCallbacks{};
         CallbackManager<void()> timeoutCallbacks{};

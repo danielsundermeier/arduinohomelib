@@ -37,7 +37,7 @@ void Max31856Sensor::setup()
 
 void Max31856Sensor::update()
 {
-    this->newRawValue(this->thermocouple.readThermocoupleTemperature());
+    this->newRawValue(this->thermocouple.readCJTemperature());
     if (this->shouldSendValue())
     {
         Logger->debug("sensor.max31856", "Send Value: %s%s", this->valueStr, this->getUnitOfMeassurement().c_str());

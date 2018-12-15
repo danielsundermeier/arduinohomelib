@@ -54,6 +54,11 @@ void Component::handleMqttMessage(String cmd)
 
 }
 
+void Component::handleUdpMessage(int pin, const char* cmd)
+{
+
+}
+
 void Component::setDiscoveryInfo()
 {
 

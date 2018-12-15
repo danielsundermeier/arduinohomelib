@@ -2,6 +2,7 @@
 #define ARDUINOHOMELIB_APPLICATION_H
 
 #include <Arduino.h>
+#include <MemoryFree.h>
 #include <StandardCplusplus.h>
 #include <system_configuration.h>
 #include <unwind-cxx.h>
@@ -54,6 +55,8 @@ class Application
         void loop();
         void handleMqttMessage(char* topic, byte* payload, unsigned int length);
         void handleMqttMessageHomeAssistantStatus(String cmd);
+
+        void handleUdpMessage(char* message);
 
         // Binary_sensor
         Hcsr501BinarySensor* makeHcsr501BinarySensor(String name, int pin);

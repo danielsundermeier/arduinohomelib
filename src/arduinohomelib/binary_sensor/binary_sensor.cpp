@@ -57,7 +57,17 @@ void BinarySensor::handleMqttConnected()
 
 void BinarySensor::discover()
 {
-    if (globalMqttClient->publish(this->discoveryTopic.c_str(), this->discoveryInfo) == true)
+    StaticJsonBuffer<ARDOINOHOMELIB_JSON_BUFFER_SIZE> JSONbuffer;
+    JsonObject& discoveryInfo = JSONbuffer.createObject();
+
+    discoveryInfo["platform"] = "mqtt";
+    discoveryInfo["device_class"] = this->getDeviceClass();
+    discoveryInfo["name"] = this->getName();
+    discoveryInfo["unique_id"] = this->fullId;
+    discoveryInfo["state_topic"] = this->stateTopic;
+    discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
+
+    if (globalMqttClient->publish(this->discoveryTopic.c_str(), discoveryInfo) == true)
     {
         this->sendState();
         isDiscovered = true;
@@ -66,6 +76,8 @@ void BinarySensor::discover()
     {
         Logger->debug("binary_sensor", "Error sending discovery");
     }
+
+    JSONbuffer.clear();
 }
 
 void BinarySensor::sendState()
@@ -80,12 +92,7 @@ const char* BinarySensor::getDeviceClass() const
 
 void BinarySensor::setDiscoveryInfo()
 {
-    this->discoveryInfo["platform"] = "mqtt";
-    this->discoveryInfo["device_class"] = this->getDeviceClass();
-    this->discoveryInfo["name"] = this->getName();
-    this->discoveryInfo["unique_id"] = this->fullId;
-    this->discoveryInfo["state_topic"] = this->stateTopic;
-    this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
+
 }
 
 void BinarySensor::addStateCallback(void (*function)(bool state))

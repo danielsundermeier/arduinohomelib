@@ -32,6 +32,9 @@ void Application::setup()
     for (uint32_t i = 0; i < componentsCount; i++) {
         this->components[i]->setup_();
     }
+
+    Serial.print("freeMemory=");
+    Serial.println(freeMemory());
 }
 
 void Application::loop()
@@ -81,7 +84,7 @@ void Application::handleMqttMessage(char* topic, byte* payload, unsigned int len
         cmd += (char)payload[i];
     }
     Logger->debug("mqtt", "Received\t[%s]\t%s", topic, cmd.c_str());
-    if (strcmp(topic, "homeassistant/status") == 0)
+    if (strcmp(topic, "hass/status") == 0)
     {
         this->handleMqttMessageHomeAssistantStatus(cmd);
 
@@ -95,6 +98,11 @@ void Application::handleMqttMessage(char* topic, byte* payload, unsigned int len
             this->components[i]->handleMqttMessage(cmd);
         }
     }
+}
+
+void Application::handleUdpMessage(char* message)
+{
+
 }
 
 uint8_t Application::getComponentsCount() const

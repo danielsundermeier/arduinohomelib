@@ -77,18 +77,46 @@ void Switch::handleMqttMessage(String cmd)
     }
 }
 
+void Switch::handleUdpMessage(int pin, const char* cmd)
+{
+    if (pin == this->pin)
+    {
+        if (strcmp(cmd, "") == 0)
+        {
+            this->toggle();
+        }
+        else if (strcmp(cmd, "on") == 0)
+        {
+            this->on();
+        }
+        else if (strcmp(cmd, "off") == 0)
+        {
+            this->off();
+        }
+        else if (strcmp(cmd, "toggle") == 0)
+        {
+            this->toggle();
+        }
+    }
+}
+
 void Switch::setDiscoveryInfo()
 {
-    this->discoveryInfo["platform"] = "mqtt";
-    this->discoveryInfo["name"] = this->getName();
-    this->discoveryInfo["state_topic"] = this->stateTopic;
-    this->discoveryInfo["command_topic"] = this->commandTopic;
-    this->discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
+
 }
 
 void Switch::discover()
 {
-    if (globalMqttClient->publish(this->discoveryTopic.c_str(), this->discoveryInfo) == true)
+    StaticJsonBuffer<ARDOINOHOMELIB_JSON_BUFFER_SIZE> JSONbuffer;
+    JsonObject& discoveryInfo = JSONbuffer.createObject();
+
+    discoveryInfo["platform"] = "mqtt";
+    discoveryInfo["name"] = this->getName();
+    discoveryInfo["state_topic"] = this->stateTopic;
+    discoveryInfo["command_topic"] = this->commandTopic;
+    discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
+
+    if (globalMqttClient->publish(this->discoveryTopic.c_str(), discoveryInfo) == true)
     {
         globalMqttClient->publish(this->commandTopic.c_str(), "OFF");
         isDiscovered = true;
