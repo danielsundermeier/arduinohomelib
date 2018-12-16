@@ -65,13 +65,8 @@ void Application::handleMqttMessageHomeAssistantStatus(String cmd)
     {
         globalMqttClient->available();
         for (uint32_t i = 0; i < App.getComponentsCount(); i++) {
-            App.components[i]->discover();
-        }
-    }
-    else if (strcmp(cmd.c_str(), "offline") == 0)
-    {
-        for (uint32_t i = 0; i < App.getComponentsCount(); i++) {
             App.components[i]->undiscovered();
+            App.components[i]->discover();
         }
     }
 }
