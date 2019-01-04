@@ -105,12 +105,12 @@ bool MqttClient::log(const char* payload)
 
 void MqttClient::available()
 {
-    publish(_statusTopic.c_str(), "online");
+    publish(_statusTopic.c_str(), "online", true);
 }
 
 void MqttClient::unavailable()
 {
-    publish(_statusTopic.c_str(), "offline");
+    publish(_statusTopic.c_str(), "offline", true);
 }
 
 MqttClient *globalMqttClient = nullptr;
