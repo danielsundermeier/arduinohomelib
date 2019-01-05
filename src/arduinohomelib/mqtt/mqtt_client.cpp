@@ -2,9 +2,6 @@
 
 MqttClient::MqttClient(PubSubClient client, const MQTTCredentials &credentials, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)()) : _credentials(credentials)
 {
-
-    _debugTopic = _credentials.clientId + "/debug";
-    _statusTopic = _credentials.clientId + "/status";
     this->client = client;
     this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
     setConnectedCallback(connectedCallback);
@@ -56,7 +53,10 @@ void MqttClient::loop()
 
 bool MqttClient::connect()
 {
-    if (client.connect(_credentials.clientId.c_str(), _credentials.username.c_str(), _credentials.password.c_str(), _statusTopic.c_str(), 1, 0, "offline"))
+    char statusTopic [50];
+    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId.c_str());
+
+    if (client.connect(_credentials.clientId.c_str(), _credentials.username.c_str(), _credentials.password.c_str(), statusTopic, 1, 1, "offline"))
     {
         Logger->debug("mqtt", "Verbunden");
         if (_connectedCallback != NULL)
@@ -80,7 +80,7 @@ bool MqttClient::publish(const char* topic, const char* payload)
 {
     Logger->debug("mqtt", "Publish\t[%s]\t%s", topic, payload);
 
-    return client.publish(topic, payload);
+    return client.publish(topic, payload, true);
 }
 
 bool MqttClient::publish(const char* topic, JsonObject& data)
@@ -100,17 +100,26 @@ bool MqttClient::subscribe(const char* topic)
 
 bool MqttClient::log(const char* payload)
 {
-    return publish(_debugTopic.c_str(), payload);
+    char debugTopic [50];
+    sprintf (debugTopic, "%s%s/debug", Settings::mqttPrefix, _credentials.clientId.c_str());
+
+    return publish(debugTopic, payload);
 }
 
 void MqttClient::available()
 {
-    publish(_statusTopic.c_str(), "online", true);
+    char statusTopic [50];
+    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId.c_str());
+
+    publish(statusTopic, "online");
 }
 
 void MqttClient::unavailable()
 {
-    publish(_statusTopic.c_str(), "offline", true);
+    char statusTopic [50];
+    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId.c_str());
+
+    publish(statusTopic, "offline");
 }
 
 MqttClient *globalMqttClient = nullptr;

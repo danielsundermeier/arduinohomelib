@@ -151,5 +151,7 @@ void MomentaryButton::handleClick(unsigned short int eventType)
 
 void MomentaryButton::publish(unsigned short int eventType)
 {
-    globalMqttClient->publish((String(Settings::name) + "/" + String(_pin) + "/" + EVENT_TYPES[eventType]).c_str(), "ON");
+    char buffer [50];
+    sprintf (buffer, "%s/%d/%s", Settings::name, this->_pin, EVENT_TYPES[eventType].c_str());
+    globalMqttClient->publish(buffer, "ON");
 }

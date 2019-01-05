@@ -31,7 +31,6 @@ class MomentaryButton : public Component, public Nameable
         void setPin(int pin);
         void setRelaisPin(int pin);
     private:
-        String _topic;
         int _pin;
         int _relaisPin = 0;
         Bounce _bouncer;

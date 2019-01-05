@@ -37,8 +37,6 @@ class MqttClient
         MQTTCredentials _credentials;
         PubSubClient client;
         void (*_connectedCallback)();
-        String _statusTopic;
-        String _debugTopic;
         void unavailable();
 };
 

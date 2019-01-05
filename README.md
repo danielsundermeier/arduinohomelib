@@ -111,5 +111,5 @@ void mqttConnected()
 
 ## Installation
 
-1. Download the folder (https://github.com/OttoWinter/esphomelib/releases)
+1. Download the ZIP-Folder
 2.  (In the Arduino IDE)  **Sketch > Include Library > Add .ZIP Library... >**  select the downloaded file  **> Open**
