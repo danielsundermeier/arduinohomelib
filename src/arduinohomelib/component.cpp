@@ -1,6 +1,12 @@
 #include "arduinohomelib/component.h"
 
-Component::Component() {}
+Component::Component()
+{
+    if (globalMqttClient)
+    {
+        this->useMqtt = true;
+    }
+}
 
 void Component::setup_()
 {
@@ -22,6 +28,11 @@ void Component::setup()
 void Component::loop()
 {
 
+}
+
+void Component::disableMqtt()
+{
+    this->useMqtt = false;
 }
 
 void Component::undiscovered()

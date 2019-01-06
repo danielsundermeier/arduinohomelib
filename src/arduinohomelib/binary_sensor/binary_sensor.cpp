@@ -49,7 +49,7 @@ bool BinarySensor::toLow()
 
 void BinarySensor::handleMqttConnected()
 {
-    if (isDiscovered == false)
+    if (this->isDiscovered == false && this->useMqtt == true)
     {
         discover();
     }
@@ -82,6 +82,11 @@ void BinarySensor::discover()
 
 void BinarySensor::sendState()
 {
+    if (this->useMqtt == false)
+    {
+        return;
+    }
+
     globalMqttClient->publish(this->stateTopic.c_str(), (this->state ? "ON" : "OFF"));
 }
 

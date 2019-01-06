@@ -48,7 +48,7 @@ void SensorComponent::discover()
 
 void SensorComponent::handleMqttConnected()
 {
-    if (isDiscovered == false)
+    if (isDiscovered == false && this->useMqtt == true)
     {
         discover();
     }

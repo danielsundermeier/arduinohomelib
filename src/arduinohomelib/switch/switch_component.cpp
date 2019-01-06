@@ -43,6 +43,12 @@ void Switch::write(int value)
     Logger->debug("switch", "Schalte\t[%2d]\t%d", this->pin, value);
 
     digitalWrite(this->pin, value);
+
+    if (this->useMqtt == false)
+    {
+        return;
+    }
+
     globalMqttClient->publish(this->stateTopic.c_str(), (read() == 1 ? "ON" : "OFF"));
 }
 
@@ -58,6 +64,11 @@ void Switch::subscribe()
 
 void Switch::handleMqttConnected()
 {
+    if (this->useMqtt == false)
+    {
+        return;
+    }
+
     this->subscribe();
     if (isDiscovered == false)
     {
@@ -67,6 +78,11 @@ void Switch::handleMqttConnected()
 
 void Switch::handleMqttMessage(String cmd)
 {
+    if (this->useMqtt == false)
+    {
+        return;
+    }
+
     if (strcmp(cmd.c_str(), "ON") == 0)
     {
         on();

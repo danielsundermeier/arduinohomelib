@@ -26,6 +26,7 @@ class Component
         virtual void setup();
         virtual void loop();
 
+        void disableMqtt();
         void undiscovered();
         virtual void discover();
         virtual void subscribe();
@@ -49,6 +50,7 @@ class Component
         String friendlyName;
         String fullId;
 
+        bool useMqtt = false;
         bool isDiscovered = false;
         String commandTopic;
         String stateTopic;
@@ -93,5 +95,7 @@ class Nameable
         String id;
         String name;
 };
+
+#include "arduinohomelib/mqtt/mqtt_client.h"
 
 #endif

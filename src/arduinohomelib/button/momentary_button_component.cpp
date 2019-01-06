@@ -151,6 +151,11 @@ void MomentaryButton::handleClick(unsigned short int eventType)
 
 void MomentaryButton::publish(unsigned short int eventType)
 {
+    if (this->useMqtt == false)
+    {
+        return;
+    }
+
     char buffer [50];
     sprintf (buffer, "%s/%d/%s", Settings::name, this->_pin, EVENT_TYPES[eventType].c_str());
     globalMqttClient->publish(buffer, "ON");
