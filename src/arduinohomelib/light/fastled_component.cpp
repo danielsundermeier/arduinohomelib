@@ -1,6 +1,6 @@
 #include "arduinohomelib/light/fastled_component.h"
 
-FastledLight::FastledLight(String name, int pin, unsigned short int numLeds, CRGB* leds) : Nameable(name)
+FastledLight::FastledLight(const char* name, int pin, unsigned short int numLeds, CRGB* leds) : Nameable(name)
 {
     this->pin = pin;
     this->leds = leds;

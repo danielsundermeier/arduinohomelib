@@ -8,15 +8,15 @@
 class Max31856Sensor : public SensorComponent
 {
     public:
-        Max31856Sensor(String name, int csPin);
-        Max31856Sensor(String name, int csPin, int diPin, int doPin, int clkPin);
+        Max31856Sensor(const char* name, int csPin);
+        Max31856Sensor(const char* name, int csPin, int diPin, int doPin, int clkPin);
 
         void setup() override;
 
         void update();
 
     protected:
-        int csPin;
+
         int diPin;
         int doPin;
         int clkPin;

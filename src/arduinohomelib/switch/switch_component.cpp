@@ -1,8 +1,8 @@
 #include "arduinohomelib/switch/switch_component.h"
 
-Switch::Switch(String name) : Nameable(name) {}
+Switch::Switch(const char* name) : Nameable(name) {}
 
-Switch::Switch(String name, int pin) : Nameable(name)
+Switch::Switch(const char* name, int pin) : Nameable(name)
 {
     setPin(pin);
 }
@@ -11,16 +11,6 @@ void Switch::setPin(int pin)
 {
     this->pin = pin;
     pinMode(pin, OUTPUT);
-
-    this->friendlyName = "Switch " + String(this->pin);
-    this->id = "Switch_" + String(this->pin);
-    this->fullId = String(Settings::name) + "_" + this->id;
-
-    this->commandTopic = String(Settings::name) + "/" + String(this->pin) + "/set";
-    this->stateTopic = String(Settings::name) + "/" + String(this->pin) + "/state";
-    this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->id + "/config";
-
-    setDiscoveryInfo();
 }
 
 void Switch::on()
@@ -49,7 +39,7 @@ void Switch::write(int value)
         return;
     }
 
-    globalMqttClient->publish(this->stateTopic.c_str(), (read() == 1 ? "ON" : "OFF"));
+    globalMqttClient->publish(this->getTopic("state"), (read() == 1 ? "ON" : "OFF"));
 }
 
 int Switch::read()
@@ -59,7 +49,7 @@ int Switch::read()
 
 void Switch::subscribe()
 {
-    globalMqttClient->subscribe(this->commandTopic.c_str());
+    globalMqttClient->subscribe(this->getTopic("set"));
 }
 
 void Switch::handleMqttConnected()
@@ -116,11 +106,6 @@ void Switch::handleUdpMessage(int pin, const char* cmd)
     }
 }
 
-void Switch::setDiscoveryInfo()
-{
-
-}
-
 void Switch::discover()
 {
     StaticJsonBuffer<ARDOINOHOMELIB_JSON_BUFFER_SIZE> JSONbuffer;
@@ -128,13 +113,13 @@ void Switch::discover()
 
     discoveryInfo["platform"] = "mqtt";
     discoveryInfo["name"] = this->getName();
-    discoveryInfo["state_topic"] = this->stateTopic;
-    discoveryInfo["command_topic"] = this->commandTopic;
+    discoveryInfo["state_topic"] = this->getTopic("state");
+    discoveryInfo["command_topic"] = this->getTopic("set");
     discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
 
-    if (globalMqttClient->publish(this->discoveryTopic.c_str(), discoveryInfo) == true)
+    if (globalMqttClient->publish(this->getDiscoveryTopic(), discoveryInfo) == true)
     {
-        globalMqttClient->publish(this->commandTopic.c_str(), "OFF");
+        globalMqttClient->publish(this->getTopic("set"), "OFF");
         isDiscovered = true;
     }
     else

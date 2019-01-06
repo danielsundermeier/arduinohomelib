@@ -26,11 +26,11 @@ class Component
         virtual void setup();
         virtual void loop();
 
+        char* getTopic(const char* suffix);
         void disableMqtt();
         void undiscovered();
         virtual void discover();
         virtual void subscribe();
-        virtual String getCommandTopic();
         virtual void handleMqttConnected();
         virtual void handleMqttMessage(String cmd);
 
@@ -47,21 +47,17 @@ class Component
         void addTimeoutCallback(void (*function)());
 
     protected:
-        String friendlyName;
-        String fullId;
+
+        char buffer[50];
+        int pin;
 
         bool useMqtt = false;
         bool isDiscovered = false;
-        String commandTopic;
-        String stateTopic;
-        String discoveryTopic;
 
         CallbackManager<void()> intervalCallbacks{};
         CallbackManager<void()> timeoutCallbacks{};
 
         void loopInternal();
-
-        void setDiscoveryInfo();
 
         /// Internal struct for storing timeout/interval functions.
         struct TimeFunction
@@ -85,15 +81,18 @@ class Component
 class Nameable
 {
     public:
-        explicit Nameable(String name);
+        explicit Nameable(const char* name);
 
-        void setName(String name);
+        void setName(const char* name);
 
-        String getName() const { return this->name; }
-        String getId() const { return this->id; }
+        const char* getId();
+        const char* getFullId();
+        const char* getDiscoveryTopic();
+        virtual const char* getDevice() const { return ""; }
+        const char* getName() const { return this->name; }
     protected:
-        String id;
-        String name;
+        char nameableBuffer[50];
+        const char* name;
 };
 
 #include "arduinohomelib/mqtt/mqtt_client.h"

@@ -23,15 +23,15 @@ class MomentaryButton : public Component, public Nameable
 {
     public:
         const int BOUNCER_INTERVAL = 25;
-        MomentaryButton(String name);
-        MomentaryButton(String name, int pin);
-        MomentaryButton(String name, int pin, int relaisPin);
+        MomentaryButton(const char* name);
+        MomentaryButton(const char* name, int pin);
+        MomentaryButton(const char* name, int pin, int relaisPin);
         void setup() override;
         void loop() override;
         void setPin(int pin);
         void setRelaisPin(int pin);
     private:
-        int _pin;
+        int pin;
         int _relaisPin = 0;
         Bounce _bouncer;
         boolean DCwaiting = false; // whether we're waiting for a double click (down)

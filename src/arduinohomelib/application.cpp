@@ -88,7 +88,7 @@ void Application::handleMqttMessage(char* topic, byte* payload, unsigned int len
 
     for (uint32_t i = 0; i < componentsCount; i++)
     {
-        if (strcmp(topic, App.components[i]->getCommandTopic().c_str()) == 0)
+        if (strcmp(topic, App.components[i]->getTopic("set")) == 0)
         {
             this->components[i]->handleMqttMessage(cmd);
         }
@@ -155,47 +155,47 @@ UdpComponent* Application::initUdp(void (*callback)(char*), IPAddress receiverIp
     return this->udp;
 }
 
-Hcsr501BinarySensor* Application::makeHcsr501BinarySensor(String name, int pin)
+Hcsr501BinarySensor* Application::makeHcsr501BinarySensor(const char* name, int pin)
 {
     return this->registerComponent(
         new Hcsr501BinarySensor(name, pin)
     );
 }
 
-MomentaryButton* Application::makeMomentaryButton(String name, int pin)
+MomentaryButton* Application::makeMomentaryButton(const char* name, int pin)
 {
     return this->registerComponent(
         new MomentaryButton(name, pin)
     );
 }
 
-MomentaryButton* Application::makeMomentaryButton(String name, int pin, int relaisPin)
+MomentaryButton* Application::makeMomentaryButton(const char* name, int pin, int relaisPin)
 {
     return this->registerComponent(new MomentaryButton(name, pin, relaisPin));
 }
 
-FastledLight* Application::makeFastledLight(String name, int pin, unsigned short int numLeds, CRGB* leds)
+FastledLight* Application::makeFastledLight(const char* name, int pin, unsigned short int numLeds, CRGB* leds)
 {
     return this->registerComponent(
         new FastledLight(name, pin, numLeds, leds)
     );
 }
 
-Dht22Sensor* Application::makeDht22Sensor(String nameTemperature, String nameHumidity, int pin)
+Dht22Sensor* Application::makeDht22Sensor(const char* nameTemperature, const char* nameHumidity, int pin)
 {
     return this->registerComponent(
         new Dht22Sensor(nameTemperature, nameHumidity, pin)
     );
 }
 
-Max31856Sensor* Application::makeMax31856Sensor(String name, int csPin)
+Max31856Sensor* Application::makeMax31856Sensor(const char* name, int csPin)
 {
     return this->registerComponent(
         new Max31856Sensor(name, csPin)
     );
 }
 
-Max31856Sensor* Application::makeMax31856Sensor(String name, int csPin, int diPin, int doPin, int clkPin)
+Max31856Sensor* Application::makeMax31856Sensor(const char* name, int csPin, int diPin, int doPin, int clkPin)
 {
     return this->registerComponent(
         new Max31856Sensor(name, csPin, diPin, doPin, clkPin)
@@ -203,21 +203,21 @@ Max31856Sensor* Application::makeMax31856Sensor(String name, int csPin, int diPi
 }
 
 
-Max6675Sensor* Application::makeMax6675Sensor(String name, int so, int cs, int clk)
+Max6675Sensor* Application::makeMax6675Sensor(const char* name, int so, int cs, int clk)
 {
     return this->registerComponent(
         new Max6675Sensor(name, so, cs, clk)
     );
 }
 
-Temt6000Sensor* Application::makeTemt6000Sensor(String name, int pin)
+Temt6000Sensor* Application::makeTemt6000Sensor(const char* name, int pin)
 {
     return this->registerComponent(
         new Temt6000Sensor(name, pin)
     );
 }
 
-Switch* Application::makeSwitch(String name, int pin)
+Switch* Application::makeSwitch(const char* name, int pin)
 {
     return this->registerComponent(
         new Switch(name, pin)

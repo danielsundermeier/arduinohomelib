@@ -50,9 +50,11 @@ void Component::subscribe()
 
 }
 
-String Component::getCommandTopic()
+char* Component::getTopic(const char* suffix)
 {
-    return this->commandTopic;
+    sprintf (this->buffer, "%s/%d/%s", Settings::name, this->pin, suffix);
+
+    return this->buffer;
 }
 
 void Component::handleMqttConnected()
@@ -66,11 +68,6 @@ void Component::handleMqttMessage(String cmd)
 }
 
 void Component::handleUdpMessage(int pin, const char* cmd)
-{
-
-}
-
-void Component::setDiscoveryInfo()
 {
 
 }
@@ -197,13 +194,31 @@ void Component::addTimeoutCallback(void (*function)())
     this->timeoutCallbacks.add(function);
 }
 
-Nameable::Nameable(String name)
+Nameable::Nameable(const char* name)
 {
-    setName(name);
+    this->setName(name);
 }
 
-void Nameable::setName(String name)
+void Nameable::setName(const char* name)
 {
     this->name = name;
-    this->id = toKebabCase(name);
+}
+
+const char* Nameable::getId()
+{
+    return toKebabCase(this->name);
+}
+
+const char* Nameable::getFullId()
+{
+    sprintf (this->nameableBuffer, "%s_%s", Settings::name, this->getId());
+
+    return this->nameableBuffer;
+}
+
+const char* Nameable::getDiscoveryTopic()
+{
+    sprintf (this->nameableBuffer, "%s/%s/%s/%s/config", Settings::name, this->getDevice(), this->getFullId(), this->getId());
+
+    return this->nameableBuffer;
 }

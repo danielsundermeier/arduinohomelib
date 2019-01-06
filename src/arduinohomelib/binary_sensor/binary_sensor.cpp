@@ -1,6 +1,6 @@
 #include "arduinohomelib/binary_sensor/hcsr501_component.h"
 
-BinarySensor::BinarySensor(String name, int pin) : Nameable(name)
+BinarySensor::BinarySensor(const char* name, int pin) : Nameable(name)
 {
     this->pin = pin;
 }
@@ -8,15 +8,6 @@ BinarySensor::BinarySensor(String name, int pin) : Nameable(name)
 void BinarySensor::setup()
 {
     pinMode(this->pin, INPUT);
-
-    this->friendlyName = "Bewegung";
-    this->id = "motion_" + String(this->pin);
-    this->fullId = String(Settings::name) + "_" + this->id;
-
-    this->stateTopic = String(Settings::name) + "/" + String(this->pin) + "/state";
-    this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->id + "/config";
-
-    setDiscoveryInfo();
 }
 
 void BinarySensor::loop()
@@ -63,11 +54,11 @@ void BinarySensor::discover()
     discoveryInfo["platform"] = "mqtt";
     discoveryInfo["device_class"] = this->getDeviceClass();
     discoveryInfo["name"] = this->getName();
-    discoveryInfo["unique_id"] = this->fullId;
-    discoveryInfo["state_topic"] = this->stateTopic;
+    discoveryInfo["unique_id"] = this->getFullId();
+    discoveryInfo["state_topic"] = this->getTopic("state");
     discoveryInfo["availability_topic"] = String(Settings::name) + "/status";
 
-    if (globalMqttClient->publish(this->discoveryTopic.c_str(), discoveryInfo) == true)
+    if (globalMqttClient->publish(this->getDiscoveryTopic(), discoveryInfo) == true)
     {
         this->sendState();
         isDiscovered = true;
@@ -87,17 +78,7 @@ void BinarySensor::sendState()
         return;
     }
 
-    globalMqttClient->publish(this->stateTopic.c_str(), (this->state ? "ON" : "OFF"));
-}
-
-const char* BinarySensor::getDeviceClass() const
-{
-    return "None";
-}
-
-void BinarySensor::setDiscoveryInfo()
-{
-
+    globalMqttClient->publish(this->getTopic("state"), (this->state ? "ON" : "OFF"));
 }
 
 void BinarySensor::addStateCallback(void (*function)(bool state))

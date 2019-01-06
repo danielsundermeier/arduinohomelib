@@ -2,7 +2,7 @@
 
 LogComponent::LogComponent()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
 
     Logger = this;
 }
@@ -19,6 +19,11 @@ int LogComponent::debug(const char *tag, const char *format, ...)
 
 int LogComponent::log_sprinf(int level, const char *tag, const char *format, va_list args)
 {
+    if (Logger == nullptr)
+    {
+        return 0;
+    }
+
     int ret = vsnprintf(buffer, ARDUINOHOMELIB_LOG_BUFFER_SIZE, format, args);
 
     String message = String(tag) + "\t"+ String(buffer);

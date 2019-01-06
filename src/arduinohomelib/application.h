@@ -28,10 +28,9 @@
 class Application
 {
     private:
-        String name = "No Name Set";
+        const char* name = "No Name Set";
         uint32_t componentsCount = 0;
-        template<class C>
-        C* registerComponent(C* c);
+
 
     public:
         Application();
@@ -48,6 +47,9 @@ class Application
         UdpComponent* udp{nullptr};
         UdpComponent* initUdp(void (*callback)(char*), IPAddress receiverIp);
 
+        template<class C>
+        C* registerComponent(C* c);
+
         uint8_t getComponentsCount() const;
 
         void setName(const char* name);
@@ -59,24 +61,24 @@ class Application
         void handleUdpMessage(char* message);
 
         // Binary_sensor
-        Hcsr501BinarySensor* makeHcsr501BinarySensor(String name, int pin);
+        Hcsr501BinarySensor* makeHcsr501BinarySensor(const char* name, int pin);
 
         // Button
-        MomentaryButton* makeMomentaryButton(String name, int pin);
-        MomentaryButton* makeMomentaryButton(String name, int pin, int relaisPin);
+        MomentaryButton* makeMomentaryButton(const char* name, int pin);
+        MomentaryButton* makeMomentaryButton(const char* name, int pin, int relaisPin);
 
         // Light
-        FastledLight* makeFastledLight(String name, int pin, unsigned short int numLeds, CRGB* leds);
+        FastledLight* makeFastledLight(const char* name, int pin, unsigned short int numLeds, CRGB* leds);
 
         // Sensor
-        Dht22Sensor* makeDht22Sensor(String nameTemperature, String nameHumidity, int pin);
-        Max31856Sensor* makeMax31856Sensor(String name, int csPin);
-        Max31856Sensor* makeMax31856Sensor(String name, int csPin, int diPin, int doPin, int clkPin);
-        Max6675Sensor* makeMax6675Sensor(String name, int so, int cs, int clk);
-        Temt6000Sensor* makeTemt6000Sensor(String name, int pin);
+        Dht22Sensor* makeDht22Sensor(const char* nameTemperature, const char* nameHumidity, int pin);
+        Max31856Sensor* makeMax31856Sensor(const char* name, int csPin);
+        Max31856Sensor* makeMax31856Sensor(const char* name, int csPin, int diPin, int doPin, int clkPin);
+        Max6675Sensor* makeMax6675Sensor(const char* name, int so, int cs, int clk);
+        Temt6000Sensor* makeTemt6000Sensor(const char* name, int pin);
 
         // Switch
-        Switch* makeSwitch(String name, int pin);
+        Switch* makeSwitch(const char* name, int pin);
 };
 
 extern Application App;

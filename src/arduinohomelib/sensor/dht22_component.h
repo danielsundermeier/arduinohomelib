@@ -7,7 +7,7 @@
 class Dht22Sensor : public SensorComponent
 {
     public:
-        Dht22Sensor(String nameTemperature, String nameHumidity, int pin);
+        Dht22Sensor(const char* nameTemperature, const char* nameHumidity, int pin);
 
         void setup() override;
         void update() override;

@@ -1,13 +1,13 @@
 #include "arduinohomelib/button/momentary_button_component.h"
 
-MomentaryButton::MomentaryButton(String name) : Nameable(name) {}
+MomentaryButton::MomentaryButton(const char* name) : Nameable(name) {}
 
-MomentaryButton::MomentaryButton(String name, int pin) : Nameable(name)
+MomentaryButton::MomentaryButton(const char* name, int pin) : Nameable(name)
 {
     setPin(pin);
 }
 
-MomentaryButton::MomentaryButton(String name, int pin, int relaisPin) : Nameable(name)
+MomentaryButton::MomentaryButton(const char* name, int pin, int relaisPin) : Nameable(name)
 {
     setPin(pin);
     setRelaisPin(relaisPin);
@@ -18,8 +18,8 @@ void MomentaryButton::setPin(int pin)
     _bouncer = Bounce();
     _bouncer.attach(pin, INPUT_PULLUP);
     _bouncer.interval(BOUNCER_INTERVAL);
-    _pin = pin;
-    // _topic = String(Settings::name) + "/" + String(_pin) + "/";
+    this->pin = pin;
+    // _topic = String(Settings::name) + "/" + String(this->pin) + "/";
 }
 
 void MomentaryButton::setRelaisPin(int pin)
@@ -103,7 +103,7 @@ int MomentaryButton::getEvent()
 
 void MomentaryButton::setup()
 {
-    Logger->debug("button.momentary", "Setup %2d", _pin);
+    Logger->debug("button.momentary", "Setup %2d", this->pin);
 
     // this->setInterval("interval", 2000, []() { Serial.println("Interval Function"); });
     // this->setTimeout("timeout", 3000, []() { Serial.println("Timeout Function"); });
@@ -145,7 +145,7 @@ void MomentaryButton::longHold()
 
 void MomentaryButton::handleClick(unsigned short int eventType)
 {
-    Logger->debug("button.momentary", "Button %2d\t%s", _pin, EVENT_TYPES[eventType].c_str());
+    Logger->debug("button.momentary", "Button %2d\t%s", this->pin, EVENT_TYPES[eventType].c_str());
     publish(eventType);
 }
 
@@ -156,7 +156,5 @@ void MomentaryButton::publish(unsigned short int eventType)
         return;
     }
 
-    char buffer [50];
-    sprintf (buffer, "%s/%d/%s", Settings::name, this->_pin, EVENT_TYPES[eventType].c_str());
-    globalMqttClient->publish(buffer, "ON");
+    globalMqttClient->publish(this->getTopic(EVENT_TYPES[eventType].c_str()), "ON");
 }

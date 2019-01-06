@@ -1,15 +1,14 @@
 #include "arduinohomelib/sensor/max31856_component.h"
 
-Max31856Sensor::Max31856Sensor(String name, int csPin) : SensorComponent(name)
+Max31856Sensor::Max31856Sensor(const char* name, int csPin) : SensorComponent(name)
 {
-    this->csPin = csPin;
-
+    this->pin = csPin;
     this->unitOfMeassurement = "°C";
 }
 
-Max31856Sensor::Max31856Sensor(String name, int csPin, int diPin, int doPin, int clkPin) : SensorComponent(name)
+Max31856Sensor::Max31856Sensor(const char* name, int csPin, int diPin, int doPin, int clkPin) : SensorComponent(name)
 {
-    this->csPin = csPin;
+    this->pin = csPin;
     this->diPin = diPin;
     this->doPin = doPin;
     this->clkPin = clkPin;
@@ -19,20 +18,12 @@ Max31856Sensor::Max31856Sensor(String name, int csPin, int diPin, int doPin, int
 
 void Max31856Sensor::setup()
 {
-    this->thermocouple = Adafruit_MAX31856(this->csPin, this->diPin, this->doPin, this->clkPin);
+    this->thermocouple = Adafruit_MAX31856(this->pin, this->diPin, this->doPin, this->clkPin);
     this->thermocouple.begin();
     this->thermocouple.setThermocoupleType(this->thermocouple.getThermocoupleType());
     delay(500);
 
     this->setInterval(this->getUpdateInterval());
-
-    this->friendlyName = this->getName();
-    this->fullId = String(Settings::name) + "_" + this->id;
-
-    this->stateTopic = String(Settings::name) + "/" + String(this->csPin) + "/state";
-    this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->id + "/config";
-
-    setDiscoveryInfo();
 }
 
 void Max31856Sensor::update()

@@ -8,8 +8,8 @@
 class Switch : public Component, public Nameable
 {
     public:
-        Switch(String name);
-        Switch(String name, int pin);
+        Switch(const char* name);
+        Switch(const char* name, int pin);
         void setPin(int pin);
 
         void on();
@@ -25,12 +25,11 @@ class Switch : public Component, public Nameable
 
     protected:
         const char* device = "switch";
-        int pin;
 
         int read();
         void write(int value);
 
-        void setDiscoveryInfo();
+        const char* getDevice() const { return "switch"; }
 };
 
 #endif

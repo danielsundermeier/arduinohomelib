@@ -1,6 +1,6 @@
 #include "arduinohomelib/sensor/dht22_component.h"
 
-Dht22Sensor::Dht22Sensor(String nameTemperature, String nameHumidity, int pin) : SensorComponent("")
+Dht22Sensor::Dht22Sensor(const char* nameTemperature, const char* nameHumidity, int pin) : SensorComponent("")
 {
     this->pin = pin;
 

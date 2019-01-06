@@ -6,9 +6,9 @@
 class Hcsr501BinarySensor : public BinarySensor
 {
     public:
-        Hcsr501BinarySensor(String name, int pin);
+        Hcsr501BinarySensor(const char* name, int pin);
     protected:
-        const char* getDeviceClass() const;
+        const char* getDeviceClass() const { return "motion"; }
 };
 
 #endif

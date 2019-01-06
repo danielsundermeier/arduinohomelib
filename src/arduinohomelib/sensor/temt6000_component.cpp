@@ -1,10 +1,11 @@
 #include "arduinohomelib/sensor/temt6000_component.h"
 
-Temt6000Sensor::Temt6000Sensor(String name, int pin) : SensorComponent(name)
+Temt6000Sensor::Temt6000Sensor(const char* name, int pin) : SensorComponent(name)
 {
     this->pin = pin;
 
     this->unitOfMeassurement = "lux";
+    this->setDeviceClass("illuminance");
 }
 
 void Temt6000Sensor::setup()
@@ -12,14 +13,6 @@ void Temt6000Sensor::setup()
     pinMode(pin, INPUT);
 
     this->setInterval(this->getUpdateInterval());
-
-    this->friendlyName = this->getName();
-    this->fullId = String(Settings::name) + "_" + this->id;
-
-    this->stateTopic = String(Settings::name) + "/" + String(this->pin) + "/state";
-    this->discoveryTopic = String(Settings::mqttDiscoveryPrefix) + "/" + this->device +"/" + this->fullId + "/" + this->id + "/config";
-
-    setDiscoveryInfo();
 }
 
 void Temt6000Sensor::update()

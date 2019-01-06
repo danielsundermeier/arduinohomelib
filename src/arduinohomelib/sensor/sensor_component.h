@@ -11,7 +11,7 @@
 class SensorComponent : public Component, public Nameable
 {
     public:
-        SensorComponent(String name);
+        SensorComponent(const char* name);
 
         virtual void update();
 
@@ -35,7 +35,6 @@ class SensorComponent : public Component, public Nameable
     protected:
         int pin;
 
-        const char* device = "sensor";
         String deviceClass = "";
         String icon = "";
         String unitOfMeassurement = "";
@@ -69,13 +68,13 @@ class SensorComponent : public Component, public Nameable
         virtual String getIcon() const { return this->icon; }
         virtual String getUnitOfMeassurement() const { return this->unitOfMeassurement; }
 
-        void setDiscoveryInfo();
+        const char* getDevice() const { return "sensor"; }
 };
 
 class EmptySensorComponent : public SensorComponent
 {
     public:
-        explicit EmptySensorComponent(String name, short unsigned int accuracyDecimals, String icon, String unitOfMeassurement);
+        explicit EmptySensorComponent(const char* name, short unsigned int accuracyDecimals, String icon, String unitOfMeassurement);
 
         void setup();
 
@@ -87,6 +86,8 @@ class EmptySensorComponent : public SensorComponent
 
         String getRawValueStr() const { return this->rawValueStr; }
         String getValueStr() const { return this->valueStr; }
+    protected:
+        char* getTopic(const char* suffix);
 };
 
 #endif

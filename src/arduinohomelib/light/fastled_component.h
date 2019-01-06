@@ -8,7 +8,7 @@
 class FastledLight : public Component, public Nameable
 {
     public:
-        FastledLight(String name, int pin, unsigned short int numLeds, CRGB* leds);
+        FastledLight(const char* name, int pin, unsigned short int numLeds, CRGB* leds);
 
         CRGB* leds;
         unsigned short int numLeds;

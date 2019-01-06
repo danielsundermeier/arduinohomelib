@@ -9,7 +9,7 @@
 class BinarySensor : public Component, public Nameable
 {
     public:
-        BinarySensor(String name, int pin);
+        BinarySensor(const char* name, int pin);
 
         void setup();
         void loop();
@@ -33,8 +33,8 @@ class BinarySensor : public Component, public Nameable
         bool lastState = false;
         bool state = false;
 
-        void setDiscoveryInfo();
-        virtual const char* getDeviceClass() const;
+        virtual const char* getDeviceClass() const { return "None"; }
+        const char* getDevice() const { return "binary_sensor"; }
 };
 
 #endif
