@@ -24,6 +24,7 @@
 #include "arduinohomelib/sensor/max6675_component.h"
 #include "arduinohomelib/sensor/temt6000_component.h"
 #include "arduinohomelib/switch/switch_component.h"
+#include "arduinohomelib/switch/i2c_switch_component.h"
 
 class Application
 {

@@ -85,13 +85,14 @@ class Nameable
 
         void setName(const char* name);
 
-        const char* getId();
+        String getId();
         const char* getFullId();
         const char* getDiscoveryTopic();
         virtual const char* getDevice() const { return ""; }
         const char* getName() const { return this->name; }
     protected:
-        char nameableBuffer[50];
+        char nameableBuffer[100];
+        char fullId[30];
         const char* name;
 };
 

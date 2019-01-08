@@ -152,7 +152,7 @@ void EmptySensorComponent::setup()
     Serial.println(freeMemory());
 
     Logger->debug("EmptySensor", "Name\t%s", this->getName());
-    Logger->debug("EmptySensor", "ID\t%s", this->getId());
+    Logger->debug("EmptySensor", "ID\t%s", this->getId().c_str());
     delay(1000);
 
     Logger->debug("EmptySensor", "Full ID\t%s", this->getFullId());
@@ -175,7 +175,7 @@ void EmptySensorComponent::setNewRawValue(double rawValue)
 
 char* EmptySensorComponent::getTopic(const char* suffix)
 {
-    sprintf (this->buffer, "%s/%s/%s", Settings::name, this->getId(), suffix);
+    sprintf (this->buffer, "%s/%s/%s", Settings::name, this->getId().c_str(), suffix);
 
     return this->buffer;
 }

@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <vector>
 
-const char* toKebabCase(const char* name);
+String toKebabCase(const char* name);
 
 template<typename... X> class CallbackManager;
 

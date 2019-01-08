@@ -52,6 +52,7 @@ void Component::subscribe()
 
 char* Component::getTopic(const char* suffix)
 {
+    this->buffer[0] = (char)0;
     sprintf (this->buffer, "%s/%d/%s", Settings::name, this->pin, suffix);
 
     return this->buffer;
@@ -204,21 +205,23 @@ void Nameable::setName(const char* name)
     this->name = name;
 }
 
-const char* Nameable::getId()
+String Nameable::getId()
 {
     return toKebabCase(this->name);
 }
 
 const char* Nameable::getFullId()
 {
-    sprintf (this->nameableBuffer, "%s_%s", Settings::name, this->getId());
+    this->fullId[0] = (char)0;
+    sprintf (this->fullId, "%s_%s", Settings::name, this->getId().c_str());
 
-    return this->nameableBuffer;
+    return this->fullId;
 }
 
 const char* Nameable::getDiscoveryTopic()
 {
-    sprintf (this->nameableBuffer, "%s/%s/%s/%s/config", Settings::name, this->getDevice(), this->getFullId(), this->getId());
+    this->nameableBuffer[0] = (char)0;
+    sprintf (this->nameableBuffer, "%s/%s/%s/%s/config", Settings::mqttDiscoveryPrefix, this->getDevice(), this->getFullId(), this->getId().c_str());
 
     return this->nameableBuffer;
 }

@@ -1,38 +1,37 @@
-#include "arduinohomelib/switch/switch_component.h"
+#include "arduinohomelib/switch/i2c_switch_component.h"
 
-Switch::Switch(const char* name) : Nameable(name) {}
-
-Switch::Switch(const char* name, int pin) : Nameable(name)
+I2CSwitch::I2CSwitch(const char* name, int pin, Adafruit_MCP23017 mcp) : Nameable(name)
 {
     setPin(pin);
+    this->mcp = mcp;
 }
 
-void Switch::setPin(int pin)
+void I2CSwitch::setPin(int pin)
 {
     this->pin = pin;
-    pinMode(pin, OUTPUT);
+    this->mcp.pinMode(this->pin, OUTPUT);
 }
 
-void Switch::on()
+void I2CSwitch::on()
 {
     write(HIGH);
 }
 
-void Switch::off()
+void I2CSwitch::off()
 {
     write(LOW);
 }
 
-void Switch::toggle()
+void I2CSwitch::toggle()
 {
     write(! read());
 }
 
-void Switch::write(int value)
+void I2CSwitch::write(int value)
 {
-    Logger->debug("switch", "Schalte\t[%2d]\t%d", this->pin, value);
+    Logger->debug("I2CSwitch", "Schalte\t[%2d]\t%d", this->pin, value);
 
-    digitalWrite(this->pin, value);
+    this->mcp.digitalWrite(this->pin, value);
 
     if (this->useMqtt == false)
     {
@@ -42,17 +41,17 @@ void Switch::write(int value)
     globalMqttClient->publish(this->getTopic("state"), (read() == 1 ? "ON" : "OFF"));
 }
 
-int Switch::read()
+int I2CSwitch::read()
 {
-    return digitalRead(this->pin);
+    return this->mcp.digitalRead(this->pin);
 }
 
-void Switch::subscribe()
+void I2CSwitch::subscribe()
 {
     globalMqttClient->subscribe(this->getTopic("set"));
 }
 
-void Switch::handleMqttConnected()
+void I2CSwitch::handleMqttConnected()
 {
     if (this->useMqtt == false)
     {
@@ -66,7 +65,7 @@ void Switch::handleMqttConnected()
     }
 }
 
-void Switch::handleMqttMessage(String cmd)
+void I2CSwitch::handleMqttMessage(String cmd)
 {
     if (this->useMqtt == false)
     {
@@ -81,9 +80,13 @@ void Switch::handleMqttMessage(String cmd)
     {
         off();
     }
+    else if (strcmp(cmd.c_str(), "TOGGLE") == 0)
+    {
+        toggle();
+    }
 }
 
-void Switch::handleUdpMessage(int pin, const char* cmd)
+void I2CSwitch::handleUdpMessage(int pin, const char* cmd)
 {
     if (pin == this->pin)
     {
@@ -106,7 +109,7 @@ void Switch::handleUdpMessage(int pin, const char* cmd)
     }
 }
 
-void Switch::discover()
+void I2CSwitch::discover()
 {
     StaticJsonBuffer<ARDOINOHOMELIB_JSON_BUFFER_SIZE> JSONbuffer;
     JsonObject& discoveryInfo = JSONbuffer.createObject();
@@ -124,7 +127,7 @@ void Switch::discover()
     }
     else
     {
-        Logger->debug("switch", "Error sending discovery");
-        Logger->debug("switch", "size message: %d", discoveryInfo.measureLength() + 1);
+        Logger->debug("I2CSwitch", "Error sending discovery");
+        Logger->debug("I2CSwitch", "size message: %d", discoveryInfo.measureLength() + 1);
     }
 }
