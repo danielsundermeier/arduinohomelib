@@ -19,6 +19,7 @@
 #include "arduinohomelib/binary_sensor/hcsr501_component.h"
 #include "arduinohomelib/button/momentary_button_component.h"
 #include "arduinohomelib/light/fastled_component.h"
+#include "arduinohomelib/sensor/dallastemperature_component.h"
 #include "arduinohomelib/sensor/dht22_component.h"
 #include "arduinohomelib/sensor/max31856_component.h"
 #include "arduinohomelib/sensor/max6675_component.h"
