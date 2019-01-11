@@ -1,5 +1,7 @@
 #include "arduinohomelib/sensor/dht22_component.h"
 
+#ifdef ARDUINOHOMELIB_USE_SENSOR_DHT
+
 Dht22Sensor::Dht22Sensor(const char* nameTemperature, const char* nameHumidity, int pin) : SensorComponent("")
 {
     this->pin = pin;
@@ -69,3 +71,5 @@ void Dht22Sensor::setValuesSendCount(unsigned int valuesSendCount)
     this->temperatureSensor->setValuesSendCount(valuesSendCount);
     this->humiditySensor->setValuesSendCount(valuesSendCount);
 }
+
+#endif

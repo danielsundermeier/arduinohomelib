@@ -1,5 +1,7 @@
 #include "arduinohomelib/button/momentary_button_component.h"
 
+#ifdef ARDUINOHOMELIB_USE_BUTTON_MOMENTARY
+
 MomentaryButton::MomentaryButton(const char* name) : Nameable(name) {}
 
 MomentaryButton::MomentaryButton(const char* name, int pin) : Nameable(name)
@@ -158,3 +160,5 @@ void MomentaryButton::publish(unsigned short int eventType)
 
     globalMqttClient->publish(this->getTopic(EVENT_TYPES[eventType].c_str()), "ON");
 }
+
+#endif

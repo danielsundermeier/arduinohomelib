@@ -1,6 +1,8 @@
 #ifndef ARDUINOHOMELIB_MAX31956_SENSOR_COMPONENT_H
 #define ARDUINOHOMELIB_MAX31956_SENSOR_COMPONENT_H
 
+#ifdef ARDUINOHOMELIB_USE_SENSOR_MAX31856
+
 #include <SPI.h>
 #include <Adafruit_MAX31856.h>
 #include "arduinohomelib/sensor/sensor_component.h"
@@ -25,5 +27,7 @@ class Max31856Sensor : public SensorComponent
 
         Adafruit_MAX31856 thermocouple = Adafruit_MAX31856(-1);
 };
+
+#endif
 
 #endif

@@ -82,6 +82,9 @@ void SensorComponent::newRawValue(double rawValue)
     this->sum += rawValue;
 
     this->value = calculateAverage();
+
+    this->newValueCallback.call(this->value);
+
     this->setRawValueStr();
     this->setValueStr();
 }
@@ -148,24 +151,22 @@ EmptySensorComponent::EmptySensorComponent(const char* name, short unsigned int 
 
 void EmptySensorComponent::setup()
 {
+    /*
     Serial.print("freeMemory=");
     Serial.println(freeMemory());
 
     Logger->debug("EmptySensor", "Name\t%s", this->getName());
     Logger->debug("EmptySensor", "ID\t%s", this->getId().c_str());
-    delay(1000);
 
     Logger->debug("EmptySensor", "Full ID\t%s", this->getFullId());
-    delay(2000);
 
     Logger->debug("EmptySensor", "State Topic\t%s", this->getTopic("state"));
-    delay(1000);
 
     Logger->debug("EmptySensor", "Discovery Topic\t%s", this->getDiscoveryTopic());
-    delay(1000);
 
     Serial.print("freeMemory=");
     Serial.println(freeMemory());
+    */
 }
 
 void EmptySensorComponent::setNewRawValue(double rawValue)

@@ -1,6 +1,8 @@
 #ifndef ARDUINOHOMELIB_I2C_SWITCH_COMPONENT_H
 #define ARDUINOHOMELIB_I2C_SWITCH_COMPONENT_H
 
+#ifdef ARDUINOHOMELIB_USE_SWITCH_I2C
+
 #include <Wire.h>
 #include <Adafruit_MCP23017.h>
 
@@ -34,5 +36,7 @@ class I2CSwitch : public Component, public Nameable
 
         const char* getDevice() const { return "switch"; }
 };
+
+#endif
 
 #endif

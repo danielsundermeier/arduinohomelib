@@ -1,6 +1,9 @@
 #ifndef ARDUINOHOMELIB_MOMENTARY_BUTTON_COMPONENT_H
 #define ARDUINOHOMELIB_MOMENTARY_BUTTON_COMPONENT_H
 
+#include "arduinohomelib/defines.h"
+#ifdef ARDUINOHOMELIB_USE_BUTTON_MOMENTARY
+
 #include <Bounce2.h>
 #include <Ethernet.h>
 #include "arduinohomelib/component.h"
@@ -55,5 +58,7 @@ class MomentaryButton : public Component, public Nameable
 extern MqttClient *globalMqttClient;
 extern UdpComponent *globalUdpComponent;
 extern IPAddress receiverIp;
+
+#endif
 
 #endif

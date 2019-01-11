@@ -195,6 +195,11 @@ void Component::addTimeoutCallback(void (*function)())
     this->timeoutCallbacks.add(function);
 }
 
+void Component::setPin(int pin)
+{
+    this->pin = pin;
+}
+
 Nameable::Nameable(const char* name)
 {
     this->setName(name);

@@ -1,5 +1,7 @@
 #include "arduinohomelib/sensor/max31856_component.h"
 
+#ifdef ARDUINOHOMELIB_USE_SENSOR_MAX31856
+
 Max31856Sensor::Max31856Sensor(const char* name, int csPin) : SensorComponent(name)
 {
     this->pin = csPin;
@@ -37,3 +39,5 @@ void Max31856Sensor::update()
     }
     Logger->debug("sensor.max31856", "New Value: %s%s", this->rawValueStr, this->getUnitOfMeassurement().c_str());
 }
+
+#endif

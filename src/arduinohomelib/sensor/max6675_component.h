@@ -1,6 +1,8 @@
 #ifndef ARDUINOHOMELIB_MAX6675_SENSOR_COMPONENT_H
 #define ARDUINOHOMELIB_MAX6675_SENSOR_COMPONENT_H
 
+#ifdef ARDUINOHOMELIB_USE_SENSOR_MAX6675
+
 #include <SPI.h>
 #include "max6675.h"
 #include "arduinohomelib/sensor/sensor_component.h"
@@ -23,5 +25,7 @@ class Max6675Sensor : public SensorComponent
 
         MAX6675 thermocouple;
 };
+
+#endif
 
 #endif

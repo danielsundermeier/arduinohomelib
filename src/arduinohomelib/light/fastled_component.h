@@ -1,6 +1,9 @@
 #ifndef ARDUINOHOMELIB_FASTLED_LIGHT_COMPONENT_H
 #define ARDUINOHOMELIB_FASTLED_LIGHT_COMPONENT_H
 
+#include "arduinohomelib/defines.h"
+#ifdef ARDUINOHOMELIB_USE_LIGHT_FASTLED
+
 #include <FastLED.h>
 #include "arduinohomelib/component.h"
 #include "arduinohomelib/log_component.h"
@@ -27,5 +30,7 @@ class FastledLight : public Component, public Nameable
         bool state = false;
         uint8_t pin;
 };
+
+#endif
 
 #endif

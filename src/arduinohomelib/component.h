@@ -3,12 +3,6 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <StandardCplusplus.h>
-#include <system_configuration.h>
-#include <unwind-cxx.h>
-#include <utility.h>
-#include <functional>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -45,6 +39,8 @@ class Component
 
         void addIntervalCallback(void (*function)());
         void addTimeoutCallback(void (*function)());
+
+        void setPin(int pin);
 
     protected:
 

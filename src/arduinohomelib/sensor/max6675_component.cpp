@@ -1,5 +1,7 @@
 #include "arduinohomelib/sensor/max6675_component.h"
 
+#ifdef ARDUINOHOMELIB_USE_SENSOR_MAX6675
+
 Max6675Sensor::Max6675Sensor(const char* name, int soPin, int csPin, int clkPin) : SensorComponent(name)
 {
     this->soPin = soPin;
@@ -27,3 +29,5 @@ void Max6675Sensor::update()
     }
     Logger->debug("sensor.max6675", "New Value: %s%s", this->rawValueStr, this->getUnitOfMeassurement().c_str());
 }
+
+#endif

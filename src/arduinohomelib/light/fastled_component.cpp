@@ -1,4 +1,6 @@
 #include "arduinohomelib/light/fastled_component.h"
+#include "arduinohomelib/defines.h"
+#ifdef ARDUINOHOMELIB_USE_LIGHT_FASTLED
 
 FastledLight::FastledLight(const char* name, int pin, unsigned short int numLeds, CRGB* leds) : Nameable(name)
 {
@@ -60,3 +62,5 @@ void FastledLight::setColorLed(unsigned short int i, int red, int green, int blu
     this->leds[i].green = green;
     this->leds[i].blue = blue;
 }
+
+#endif

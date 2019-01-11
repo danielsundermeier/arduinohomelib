@@ -32,6 +32,8 @@ class SensorComponent : public Component, public Nameable
         virtual void setUpdateInterval(unsigned int updateInterval);
         virtual void setValuesSendCount(unsigned int valuesSendCount);
 
+        void addNewValueCallback(void (*function)(double value));
+
     protected:
         int pin;
 
@@ -56,6 +58,8 @@ class SensorComponent : public Component, public Nameable
 
         unsigned int updateInterval = 2000;
 
+        CallbackManager<void(double)> newValueCallback{};
+
         void newRawValue(double rawValue);
         double calculateAverage();
 
@@ -63,6 +67,7 @@ class SensorComponent : public Component, public Nameable
         void setRawValueStr();
 
         virtual unsigned int getUpdateInterval() const { return this->updateInterval; }
+        virtual unsigned int getValuesSendCount() const { return this->valuesSendCount; }
         virtual short unsigned int getAccuracyDecimals() const { return this->accuracyDecimals; }
         virtual String getDeviceClass() const { return this->deviceClass; }
         virtual String getIcon() const { return this->icon; }

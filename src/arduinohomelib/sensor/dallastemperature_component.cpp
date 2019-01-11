@@ -1,5 +1,7 @@
 #include "arduinohomelib/sensor/dallastemperature_component.h"
 
+#ifdef ARDUINOHOMELIB_USE_SENSOR_DALLAS
+
 DallasTemperatureSensor::DallasTemperatureSensor(int pin, OneWire oneWire) : SensorComponent("")
 {
     this->pin = pin;
@@ -9,7 +11,12 @@ DallasTemperatureSensor::DallasTemperatureSensor(int pin, OneWire oneWire) : Sen
 
 DS18B20* DallasTemperatureSensor::add(const char* name, DeviceAddress address)
 {
-    return this->registerComponent(new DS18B20(name, address));
+    DS18B20* sensor = this->registerComponent(new DS18B20(name, address));
+    this->componentsCount++;
+    sensor->setPin((this->pin * 100) + this->componentsCount);
+
+
+    return sensor;
 }
 
 void DallasTemperatureSensor::setup()
@@ -26,20 +33,23 @@ void DallasTemperatureSensor::setup()
 
     this->sensors.begin();
 
-    this->setInterval(this->getUpdateInterval());
-
     for (uint32_t i = 0; i < componentsCount; i++) {
+        this->components[i]->setValuesSendCount(this->getValuesSendCount());
         this->components[i]->setup();
     }
+
+    this->setInterval(this->getUpdateInterval());
 }
 
 void DallasTemperatureSensor::update()
 {
     this->sensors.requestTemperatures();
-    // Logger->debug("DallasTemperatureSensor", "Temperatur: %g", temp);
-    delay(1000);
     for (uint32_t i = 0; i < this->componentsCount; i++) {
         double temp = this->sensors.getTempC(this->components[i]->address);
+        if (temp == -127) {
+            Logger->debug("sensor.ds18b20", "Temperatur konnte nicht ermittelt werden.");
+            return;
+        }
         this->components[i]->setNewRawValue(temp);
         if (this->components[i]->shouldSendValue())
         {
@@ -53,17 +63,9 @@ void DallasTemperatureSensor::update()
 
 void DallasTemperatureSensor::discover()
 {
-    this->isDiscovered = true;
-}
-
-void DallasTemperatureSensor::setUpdateInterval(unsigned int updateInterval)
-{
-
-}
-
-void DallasTemperatureSensor::setValuesSendCount(unsigned int valuesSendCount)
-{
-
+    for (uint32_t i = 0; i < this->componentsCount; i++) {
+        this->components[i]->discover();
+    }
 }
 
 DS18B20* DallasTemperatureSensor::registerComponent(DS18B20* c)
@@ -82,3 +84,5 @@ DS18B20::DS18B20(const char* name, uint8_t* address) : EmptySensorComponent(name
     this->address = address;
     // Logger->debug("DallasTemperatureSensor", "Adresse: %02X.%02X.%02X.%02X.%02X.%02X.%02X.%02X.", this->address[0], this->address[1], this->address[2], this->address[3], this->address[4], this->address[5], this->address[6], this->address[7], this->address[8]);
 }
+
+#endif

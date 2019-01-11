@@ -1,6 +1,10 @@
 #ifndef ARDUINOHOMELIB_DALLASTEMPERATURE_SENSOR_COMPONENT_H
 #define ARDUINOHOMELIB_DALLASTEMPERATURE_SENSOR_COMPONENT_H
 
+#include "arduinohomelib/defines.h"
+
+#ifdef ARDUINOHOMELIB_USE_SENSOR_DALLAS
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
@@ -27,9 +31,6 @@ class DallasTemperatureSensor : public SensorComponent
 
         void discover() override;
 
-        void setUpdateInterval(unsigned int updateInterval) override;
-        void setValuesSendCount(unsigned int valuesSendCount) override;
-
         DS18B20* registerComponent(DS18B20* c);
 
     protected:
@@ -40,11 +41,8 @@ class DallasTemperatureSensor : public SensorComponent
         OneWire* onewire;
 
         std::vector<DS18B20*> components{};
-
-        void updateTemperature();
-
-        unsigned int getUpdateInterval() const override { return this->updateInterval; }
-
 };
+
+#endif
 
 #endif

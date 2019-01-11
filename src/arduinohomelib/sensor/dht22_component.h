@@ -1,6 +1,10 @@
 #ifndef ARDUINOHOMELIB_DHT22_SENSOR_COMPONENT_H
 #define ARDUINOHOMELIB_DHT22_SENSOR_COMPONENT_H
 
+#include "arduinohomelib/defines.h"
+
+#ifdef ARDUINOHOMELIB_USE_SENSOR_DHT
+
 #include <DHT.h>
 #include "arduinohomelib/sensor/sensor_component.h"
 
@@ -30,5 +34,7 @@ class Dht22Sensor : public SensorComponent
 
         unsigned int getUpdateInterval() const override { return this->updateInterval; }
 };
+
+#endif
 
 #endif

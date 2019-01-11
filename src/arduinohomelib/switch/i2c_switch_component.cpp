@@ -1,5 +1,7 @@
 #include "arduinohomelib/switch/i2c_switch_component.h"
 
+#ifdef ARDUINOHOMELIB_USE_SWITCH_I2C
+
 I2CSwitch::I2CSwitch(const char* name, int pin, Adafruit_MCP23017 mcp) : Nameable(name)
 {
     setPin(pin);
@@ -131,3 +133,5 @@ void I2CSwitch::discover()
         Logger->debug("I2CSwitch", "size message: %d", discoveryInfo.measureLength() + 1);
     }
 }
+
+#endif
