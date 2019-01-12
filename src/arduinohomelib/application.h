@@ -78,6 +78,43 @@ class Application
         UdpComponent* udp{nullptr};
         UdpComponent* initUdp(void (*callback)(char*), IPAddress receiverIp);
 
+        // Binary_sensor
+        #ifdef ARDUINOHOMELIB_USE_BINARY_SENSOR_MOTION
+            Hcsr501BinarySensor* makeHcsr501BinarySensor(const char* name, int pin);
+        #endif
+        // Button
+        #ifdef ARDUINOHOMELIB_USE_BUTTON_MOMENTARY
+            MomentaryButton* makeMomentaryButton(const char* name, int pin);
+            MomentaryButton* makeMomentaryButton(const char* name, int pin, int relaisPin);
+        #endif
+
+        // Light
+        #ifdef ARDUINOHOMELIB_USE_LIGHT_FASTLED
+            FastledLight* makeFastledLight(const char* name, int pin, unsigned short int numLeds, CRGB* leds);
+        #endif
+        // Sensor
+        #ifdef ARDUINOHOMELIB_USE_SENSOR_DHT
+            Dht22Sensor* makeDht22Sensor(const char* nameTemperature, const char* nameHumidity, int pin);
+        #endif
+
+        #ifdef ARDUINOHOMELIB_USE_SENSOR_MAX31856
+            Max31856Sensor* makeMax31856Sensor(const char* name, int csPin);
+            Max31856Sensor* makeMax31856Sensor(const char* name, int csPin, int diPin, int doPin, int clkPin);
+        #endif
+
+        #ifdef ARDUINOHOMELIB_USE_SENSOR_MAX6675
+            Max6675Sensor* makeMax6675Sensor(const char* name, int so, int cs, int clk);
+        #endif
+
+        #ifdef ARDUINOHOMELIB_USE_SENSOR_TEMT6000
+            Temt6000Sensor* makeTemt6000Sensor(const char* name, int pin);
+        #endif
+
+        // Switch
+        #ifdef ARDUINOHOMELIB_USE_SWITCH
+            Switch* makeSwitch(const char* name, int pin);
+        #endif
+
         template<class C>
         C* registerComponent(C* c);
 
