@@ -8,6 +8,9 @@ Dht22Sensor::Dht22Sensor(const char* nameTemperature, const char* nameHumidity, 
 
     this->temperatureSensor = new EmptySensorComponent(nameTemperature, 1, "", "°C");
     this->humiditySensor = new EmptySensorComponent(nameHumidity, 0, "mdi:water-percent", "%");
+
+    this->temperatureSensor->setPin((this->pin * 100) + 1);
+    this->humiditySensor->setPin((this->pin * 100) + 2);
 }
 
 void Dht22Sensor::setup()
@@ -28,7 +31,6 @@ void Dht22Sensor::update()
 
 void Dht22Sensor::updateTemperature()
 {
-    Serial.println(this->temperatureSensor->getName());
     this->temperatureSensor->setNewRawValue(this->dht.getTemperature());
     if (this->temperatureSensor->shouldSendValue())
     {
@@ -41,7 +43,6 @@ void Dht22Sensor::updateTemperature()
 
 void Dht22Sensor::updateHumidity()
 {
-    Serial.println(this->humiditySensor->getName());
     this->humiditySensor->setNewRawValue(this->dht.getHumidity());
     if (this->humiditySensor->shouldSendValue())
     {

@@ -63,8 +63,8 @@ bool MqttClient::connect()
         {
            _connectedCallback();
         }
-        available();
         subscribe("hass/status");
+        available();
     }
     else
     {

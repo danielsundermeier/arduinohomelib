@@ -141,6 +141,10 @@ void SensorComponent::setValuesSendCount(unsigned int valuesSendCount)
     this->valuesSendCount = valuesSendCount;
 }
 
+void SensorComponent::addNewValueCallback(void (*function)(double state))
+{
+    this->newValueCallback.add(function);
+}
 
 EmptySensorComponent::EmptySensorComponent(const char* name, short unsigned int accuracyDecimals, String icon, String unitOfMeassurement) : SensorComponent(name)
 {
