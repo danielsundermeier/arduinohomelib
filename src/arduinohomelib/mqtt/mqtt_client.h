@@ -7,11 +7,11 @@
 #include "arduinohomelib/log_component.h"
 
 struct MQTTCredentials {
-    String serverIp; ///< The address of the server without port number
+    const char* serverIp; ///< The address of the server without port number
     uint16_t port; ///< The port number of the server.
-    String username;
-    String password;
-    String clientId; ///< The client ID. Will automatically be truncated to 23 characters.
+    const char* username;
+    const char* password;
+    const char* clientId; ///< The client ID. Will automatically be truncated to 23 characters.
 };
 
 class MqttClient

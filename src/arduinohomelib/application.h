@@ -34,6 +34,8 @@
     #include "arduinohomelib/sensor/dht22_component.h"
 #endif
 
+#include "arduinohomelib/sensor/hcsr04_component.h"
+
 #ifdef ARDUINOHOMELIB_USE_SENSOR_MAX31856
     #include "arduinohomelib/sensor/max31856_component.h"
 #endif
@@ -68,10 +70,10 @@ class Application
         LogComponent* initLog();
         EthernetComponent* ethernet{nullptr};
         EthernetComponent* initEthernet(byte* mac);
-        MqttClient* initMqtt(String serverId, String username, String password);
-        MqttClient* initMqtt(String serverId, String username, String password, void (*connectedCallback)());
-        MqttClient* initMqtt(String serverId, String username, String password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length));
-        MqttClient* initMqtt(String serverId, String username, String password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)());
+        MqttClient* initMqtt(const char* serverId, const char* username, const char* password);
+        MqttClient* initMqtt(const char* serverId, const char* username, const char* password, void (*connectedCallback)());
+        MqttClient* initMqtt(const char* serverId, const char* username, const char* password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length));
+        MqttClient* initMqtt(const char* serverId, const char* username, const char* password, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)());
         MqttClient* mqtt{nullptr};
         UdpComponent* udp{nullptr};
         UdpComponent* initUdp(void (*callback)(char*), IPAddress receiverIp);
@@ -88,43 +90,6 @@ class Application
         void handleMqttMessageHomeAssistantStatus(String cmd);
 
         void handleUdpMessage(char* message);
-
-        // Binary_sensor
-        #ifdef ARDUINOHOMELIB_USE_BINARY_SENSOR_MOTION
-            Hcsr501BinarySensor* makeHcsr501BinarySensor(const char* name, int pin);
-        #endif
-        // Button
-        #ifdef ARDUINOHOMELIB_USE_BUTTON_MOMENTARY
-            MomentaryButton* makeMomentaryButton(const char* name, int pin);
-            MomentaryButton* makeMomentaryButton(const char* name, int pin, int relaisPin);
-        #endif
-
-        // Light
-        #ifdef ARDUINOHOMELIB_USE_LIGHT_FASTLED
-            FastledLight* makeFastledLight(const char* name, int pin, unsigned short int numLeds, CRGB* leds);
-        #endif
-        // Sensor
-        #ifdef ARDUINOHOMELIB_USE_SENSOR_DHT
-            Dht22Sensor* makeDht22Sensor(const char* nameTemperature, const char* nameHumidity, int pin);
-        #endif
-
-        #ifdef ARDUINOHOMELIB_USE_SENSOR_MAX31856
-            Max31856Sensor* makeMax31856Sensor(const char* name, int csPin);
-            Max31856Sensor* makeMax31856Sensor(const char* name, int csPin, int diPin, int doPin, int clkPin);
-        #endif
-
-        #ifdef ARDUINOHOMELIB_USE_SENSOR_MAX6675
-            Max6675Sensor* makeMax6675Sensor(const char* name, int so, int cs, int clk);
-        #endif
-
-        #ifdef ARDUINOHOMELIB_USE_SENSOR_TEMT6000
-            Temt6000Sensor* makeTemt6000Sensor(const char* name, int pin);
-        #endif
-
-        // Switch
-        #ifdef ARDUINOHOMELIB_USE_SWITCH
-            Switch* makeSwitch(const char* name, int pin);
-        #endif
 };
 
 extern Application App;

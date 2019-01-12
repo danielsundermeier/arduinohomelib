@@ -2,8 +2,6 @@
 
 #ifdef ARDUINOHOMELIB_USE_BUTTON_MOMENTARY
 
-MomentaryButton::MomentaryButton(const char* name) : Nameable(name) {}
-
 MomentaryButton::MomentaryButton(const char* name, int pin) : Nameable(name)
 {
     setPin(pin);

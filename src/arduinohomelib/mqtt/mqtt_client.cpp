@@ -3,7 +3,7 @@
 MqttClient::MqttClient(PubSubClient client, const MQTTCredentials &credentials, void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length), void (*connectedCallback)()) : _credentials(credentials)
 {
     this->client = client;
-    this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
+    this->client.setServer(_credentials.serverIp, _credentials.port);
     setConnectedCallback(connectedCallback);
     setMessageReceivedCallback(messageReceivedCallback);
 
@@ -24,21 +24,21 @@ void MqttClient::setup(void (*messageReceivedCallback)(char* topic, byte* payloa
 {
     _connectedCallback = connectedCallback;
 
-    this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
+    this->client.setServer(_credentials.serverIp, _credentials.port);
     this->client.setCallback(messageReceivedCallback);
 }
 
 void MqttClient::setup(void (*messageReceivedCallback)(char* topic, byte* payload, unsigned int length))
 {
     _connectedCallback = NULL;
-    Logger->debug("mqtt", "Server\t%s", _credentials.serverIp.c_str());
-    this->client.setServer(_credentials.serverIp.c_str(), _credentials.port);
+    Logger->debug("mqtt", "Server\t%s", _credentials.serverIp);
+    this->client.setServer(_credentials.serverIp, _credentials.port);
     this->client.setCallback(messageReceivedCallback);
 }
 
 void MqttClient::setup()
 {
-    Logger->debug("mqtt", "Server\t%s", _credentials.serverIp.c_str());
+    Logger->debug("mqtt", "Server\t%s", _credentials.serverIp);
 }
 
 void MqttClient::loop()
@@ -54,9 +54,9 @@ void MqttClient::loop()
 bool MqttClient::connect()
 {
     char statusTopic [50];
-    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId.c_str());
+    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId);
 
-    if (client.connect(_credentials.clientId.c_str(), _credentials.username.c_str(), _credentials.password.c_str(), statusTopic, 1, 1, "offline"))
+    if (client.connect(_credentials.clientId, _credentials.username, _credentials.password, statusTopic, 1, 1, "offline"))
     {
         Logger->debug("mqtt", "Verbunden");
         if (_connectedCallback != NULL)
@@ -101,7 +101,7 @@ bool MqttClient::subscribe(const char* topic)
 bool MqttClient::log(const char* payload)
 {
     char debugTopic [50];
-    sprintf (debugTopic, "%s%s/debug", Settings::mqttPrefix, _credentials.clientId.c_str());
+    sprintf (debugTopic, "%s%s/debug", Settings::mqttPrefix, _credentials.clientId);
 
     return publish(debugTopic, payload);
 }
@@ -109,7 +109,7 @@ bool MqttClient::log(const char* payload)
 void MqttClient::available()
 {
     char statusTopic [50];
-    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId.c_str());
+    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId);
 
     publish(statusTopic, "online");
 }
@@ -117,7 +117,7 @@ void MqttClient::available()
 void MqttClient::unavailable()
 {
     char statusTopic [50];
-    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId.c_str());
+    sprintf (statusTopic, "%s%s/status", Settings::mqttPrefix, _credentials.clientId);
 
     publish(statusTopic, "offline");
 }

@@ -26,7 +26,6 @@ class MomentaryButton : public Component, public Nameable
 {
     public:
         const int BOUNCER_INTERVAL = 25;
-        MomentaryButton(const char* name);
         MomentaryButton(const char* name, int pin);
         MomentaryButton(const char* name, int pin, int relaisPin);
         void setup() override;
